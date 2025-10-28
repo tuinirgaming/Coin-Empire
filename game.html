@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Coin Empire">
+    <title>Coin Empire - Idle Clicker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkNvaW4gRW1waXJlIiwKICAic2hvcnRfbmFtZSI6ICJDb2luIEVtcGlyZSIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjZmZmZmZmIiwKICAidGhlbWVfY29sb3IiOiAiI2Y1OTUwZiIsCiAgImljb25zIjogW10KfQ==">
+    <style>
+        body {
+            overscroll-behavior: none;
+            -webkit-user-select: none;
+            user-select: none;
+            touch-action: manipulation;
+        }
+        .no-tap-highlight {
+            -webkit-tap-highlight-color: transparent;
+        }
+    </style>
+</head>
+<body class="no-tap-highlight">
+    <div id="root"></div>
+    
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/lucide-react@0.263.1/dist/umd/lucide-react.js"></script>
+    
+    <script type="text/babel">
+        const { useState, useEffect, useCallback } = React;
+        const { Coins, Zap, TrendingUp, Target, Award, RefreshCw } = lucide;
+
+        function CoinEmpire() {
+            // Load saved game state
+            const loadGame = () => {
+                try {
+                    const saved = localStorage.getItem('coinEmpireGame');
+                    if (saved) {
+                        return JSON.parse(saved);
+                    }
+                } catch (e) {
+                    console.error('Failed to load game:', e);
+                }
+                return null;
+            };
+
+            const savedGame = loadGame();
+
+            const [coins, setCoins] = useState(savedGame?.coins || 0);
+            const [totalCoins, setTotalCoins] = useState(savedGame?.totalCoins || 0);
+            const [clickPower, setClickPower] = useState(savedGame?.clickPower || 1);
+            const [coinsPerSecond, setCoinsPerSecond] = useState(0);
+            const [prestigePoints, setPrestigePoints] = useState(savedGame?.prestigePoints || 0);
+            
+            const [generators, setGenerators] = useState(savedGame?.generators || [
+                { id: 1, name: 'Piggy Bank', cost: 10, owned: 0, baseProduction: 0.1, unlocked: true },
+                { id: 2, name: 'Coin Fountain', cost: 100, owned: 0, baseProduction: 1, unlocked: false },
+                { id: 3, name: 'Gold Mine', cost: 1000, owned: 0, baseProduction: 8, unlocked: false },
+                { id: 4, name: 'Mint Factory', cost: 10000, owned: 0, baseProduction: 50, unlocked: false },
+                { id: 5, name: 'Royal Treasury', cost: 100000, owned: 0, baseProduction: 300, unlocked: false },
+                { id: 6, name: 'Money Printer', cost: 1000000, owned: 0, baseProduction: 2000, unlocked: false },
+            ]);
+            
+            const [upgrades, setUpgrades] = useState(savedGame?.upgrades || [
+                { id: 'click1', name: 'Better Fingers', cost: 50, clickBonus: 1, owned: false, category: 'click' },
+                { id: 'click2', name: 'Lucky Coin', cost: 500, clickBonus: 5, owned: false, category: 'click' },
+                { id: 'click3', name: 'Golden Touch', cost: 5000, clickBonus: 25, owned: false, category: 'click' },
+                { id: 'click4', name: 'Midas Hand', cost: 50000, clickBonus: 100, owned: false, category: 'click' },
+                
+                { id: 'multi1', name: 'Efficiency I', cost: 200, multiplier: 1.5, owned: false, category: 'multiplier' },
+                { id: 'multi2', name: 'Efficiency II', cost: 2000, multiplier: 2, owned: false, category: 'multiplier' },
+                { id: 'multi3', name: 'Efficiency III', cost: 20000, multiplier: 3, owned: false, category: 'multiplier' },
+                { id: 'multi4', name: 'Quantum Boost', cost: 200000, multiplier: 5, owned: false, category: 'multiplier' },
+                
+                { id: 'auto1', name: 'Auto Clicker I', cost: 1000, autoClick: 1, owned: false, category: 'automation' },
+                { id: 'auto2', name: 'Auto Clicker II', cost: 10000, autoClick: 5, owned: false, category: 'automation' },
+                { id: 'auto3', name: 'Auto Clicker III', cost: 100000, autoClick: 25, owned: false, category: 'automation' },
+            ]);
+
+            const [activeTab, setActiveTab] = useState('generators');
+            const [clickAnimation, setClickAnimation] = useState(false);
+
+            // Save game state
+            useEffect(() => {
+                const saveGame = () => {
+                    try {
+                        const gameState = {
+                            coins,
+                            totalCoins,
+                            clickPower,
+                            prestigePoints,
+                            generators,
+                            upgrades
+                        };
+                        localStorage.setItem('coinEmpireGame', JSON.stringify(gameState));
+                    } catch (e) {
+                        console.error('Failed to save game:', e);
+                    }
+                };
+
+                const saveInterval = setInterval(saveGame, 2000);
+                return () => clearInterval(saveInterval);
+            }, [coins, totalCoins, clickPower, prestigePoints, generators, upgrades]);
+
+            const getCurrentMultiplier = useCallback(() => {
+                let multi = 1;
+                if (prestigePoints > 0) {
+                    multi *= (1 + prestigePoints * 0.1);
+                }
+                upgrades.forEach(u => {
+                    if (u.owned && u.multiplier) {
+                        multi *= u.multiplier;
+                    }
+                });
+                return multi;
+            }, [upgrades, prestigePoints]);
+
+            useEffect(() => {
+                const multiplier = getCurrentMultiplier();
+                let cps = 0;
+                
+                generators.forEach(gen => {
+                    cps += gen.owned * gen.baseProduction * multiplier;
+                });
+                
+                upgrades.forEach(u => {
+                    if (u.owned && u.autoClick) {
+                        cps += u.autoClick * clickPower;
+                    }
+                });
+                
+                setCoinsPerSecond(cps);
+            }, [generators, upgrades, clickPower, getCurrentMultiplier]);
+
+            useEffect(() => {
+                const interval = setInterval(() => {
+                    if (coinsPerSecond > 0) {
+                        setCoins(c => c + coinsPerSecond / 10);
+                        setTotalCoins(t => t + coinsPerSecond / 10);
+                    }
+                }, 100);
+                
+                return () => clearInterval(interval);
+            }, [coinsPerSecond]);
+
+            useEffect(() => {
+                setGenerators(prev => prev.map(gen => {
+                    if (!gen.unlocked && totalCoins >= gen.cost / 2) {
+                        return { ...gen, unlocked: true };
+                    }
+                    return gen;
+                }));
+            }, [totalCoins]);
+
+            const handleClick = () => {
+                const gain = clickPower * getCurrentMultiplier();
+                setCoins(c => c + gain);
+                setTotalCoins(t => t + gain);
+                setClickAnimation(true);
+                setTimeout(() => setClickAnimation(false), 150);
+            };
+
+            const buyGenerator = (id) => {
+                const gen = generators.find(g => g.id === id);
+                if (coins >= gen.cost) {
+                    setCoins(c => c - gen.cost);
+                    setGenerators(prev => prev.map(g => 
+                        g.id === id 
+                            ? { ...g, owned: g.owned + 1, cost: Math.floor(g.cost * 1.15) }
+                            : g
+                    ));
+                }
+            };
+
+            const buyUpgrade = (id) => {
+                const upgrade = upgrades.find(u => u.id === id);
+                if (!upgrade.owned && coins >= upgrade.cost) {
+                    setCoins(c => c - upgrade.cost);
+                    setUpgrades(prev => prev.map(u => 
+                        u.id === id ? { ...u, owned: true } : u
+                    ));
+                    
+                    if (upgrade.clickBonus) {
+                        setClickPower(p => p + upgrade.clickBonus);
+                    }
+                }
+            };
+
+            const prestige = () => {
+                if (totalCoins >= 1000000) {
+                    const points = Math.floor(Math.sqrt(totalCoins / 1000000));
+                    setPrestigePoints(p => p + points);
+                    
+                    setCoins(0);
+                    setTotalCoins(0);
+                    setClickPower(1);
+                    setGenerators(prev => prev.map(g => ({ 
+                        ...g, 
+                        owned: 0, 
+                        cost: [10, 100, 1000, 10000, 100000, 1000000][g.id - 1],
+                        unlocked: g.id === 1 
+                    })));
+                    setUpgrades(prev => prev.map(u => ({ ...u, owned: false })));
+                }
+            };
+
+            const formatNumber = (num) => {
+                if (num >= 1e9) return (num / 1e9).toFixed(2) + 'B';
+                if (num >= 1e6) return (num / 1e6).toFixed(2) + 'M';
+                if (num >= 1e3) return (num / 1e3).toFixed(2) + 'K';
+                return Math.floor(num).toLocaleString();
+            };
+
+            const canPrestige = totalCoins >= 1000000;
+            const prestigeGain = canPrestige ? Math.floor(Math.sqrt(totalCoins / 1000000)) : 0;
+
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-amber-100 via-yellow-50 to-orange-100 p-2 sm:p-4">
+                    <div className="max-w-6xl mx-auto">
+                        <div className="bg-white rounded-lg shadow-lg p-3 sm:p-6 mb-3 sm:mb-4">
+                            <h1 className="text-2xl sm:text-4xl font-bold text-amber-600 mb-3 sm:mb-4 text-center flex items-center justify-center gap-2">
+                                <Coins className="w-6 h-6 sm:w-10 sm:h-10" />
+                                Coin Empire
+                            </h1>
+                            
+                            <div className="grid grid-cols-2 gap-2 sm:gap-4 text-center">
+                                <div className="bg-gradient-to-br from-yellow-100 to-amber-100 p-2 sm:p-4 rounded-lg">
+                                    <div className="text-xs sm:text-sm text-gray-600">Coins</div>
+                                    <div className="text-lg sm:text-2xl font-bold text-amber-700">{formatNumber(coins)}</div>
+                                </div>
+                                <div className="bg-gradient-to-br from-green-100 to-emerald-100 p-2 sm:p-4 rounded-lg">
+                                    <div className="text-xs sm:text-sm text-gray-600">Per Second</div>
+                                    <div className="text-lg sm:text-2xl font-bold text-green-700">{formatNumber(coinsPerSecond)}</div>
+                                </div>
+                                <div className="bg-gradient-to-br from-blue-100 to-cyan-100 p-2 sm:p-4 rounded-lg">
+                                    <div className="text-xs sm:text-sm text-gray-600">Click Power</div>
+                                    <div className="text-lg sm:text-2xl font-bold text-blue-700">{formatNumber(clickPower * getCurrentMultiplier())}</div>
+                                </div>
+                                <div className="bg-gradient-to-br from-purple-100 to-pink-100 p-2 sm:p-4 rounded-lg">
+                                    <div className="text-xs sm:text-sm text-gray-600">Prestige</div>
+                                    <div className="text-lg sm:text-2xl font-bold text-purple-700">{prestigePoints}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 mb-3 sm:mb-4">
+                            <div className="flex flex-col items-center justify-center">
+                                <button
+                                    onClick={handleClick}
+                                    className={`w-40 h-40 sm:w-48 sm:h-48 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 shadow-xl hover:shadow-2xl transition-all transform active:scale-95 flex items-center justify-center touch-manipulation ${clickAnimation ? 'scale-110' : ''}`}
+                                >
+                                    <Coins className="w-20 h-20 sm:w-24 sm:h-24 text-white" />
+                                </button>
+                                <div className="mt-4 text-center">
+                                    <div className="text-sm sm:text-lg text-gray-600">Tap to earn coins!</div>
+                                    <div className="text-2xl sm:text-3xl font-bold text-amber-600 mt-1 sm:mt-2">
+                                        +{formatNumber(clickPower * getCurrentMultiplier())}
+                                    </div>
+                                </div>
+                                
+                                {canPrestige && (
+                                    <button
+                                        onClick={prestige}
+                                        className="mt-4 px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg font-bold hover:from-purple-600 hover:to-pink-600 transition-all flex items-center gap-2 touch-manipulation text-sm sm:text-base"
+                                    >
+                                        <RefreshCw className="w-4 h-4 sm:w-5 sm:h-5" />
+                                        Prestige (+{prestigeGain} PP)
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="bg-white rounded-lg shadow-lg p-3 sm:p-6">
+                            <div className="flex gap-1 sm:gap-2 mb-3 sm:mb-4 overflow-x-auto pb-2">
+                                <button
+                                    onClick={() => setActiveTab('generators')}
+                                    className={`px-3 py-2 rounded-lg font-semibold flex items-center gap-1 sm:gap-2 whitespace-nowrap text-xs sm:text-base touch-manipulation ${activeTab === 'generators' ? 'bg-amber-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+                                >
+                                    <Zap className="w-3 h-3 sm:w-4 sm:h-4" />
+                                    Generators
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab('click')}
+                                    className={`px-3 py-2 rounded-lg font-semibold flex items-center gap-1 sm:gap-2 whitespace-nowrap text-xs sm:text-base touch-manipulation ${activeTab === 'click' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+                                >
+                                    <Target className="w-3 h-3 sm:w-4 sm:h-4" />
+                                    Click
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab('multiplier')}
+                                    className={`px-3 py-2 rounded-lg font-semibold flex items-center gap-1 sm:gap-2 whitespace-nowrap text-xs sm:text-base touch-manipulation ${activeTab === 'multiplier' ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+                                >
+                                    <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4" />
+                                    Boost
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab('automation')}
+                                    className={`px-3 py-2 rounded-lg font-semibold flex items-center gap-1 sm:gap-2 whitespace-nowrap text-xs sm:text-base touch-manipulation ${activeTab === 'automation' ? 'bg-purple-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+                                >
+                                    <Award className="w-3 h-3 sm:w-4 sm:h-4" />
+                                    Auto
+                                </button>
+                            </div>
+
+                            <div className="space-y-2 max-h-[50vh] overflow-y-auto">
+                                {activeTab === 'generators' && generators.map(gen => (
+                                    gen.unlocked && (
+                                        <div key={gen.id} className="flex items-center justify-between p-3 sm:p-4 bg-gradient-to-r from-amber-50 to-yellow-50 rounded-lg border-2 border-amber-200">
+                                            <div className="flex-1 min-w-0 mr-2">
+                                                <div className="font-bold text-gray-800 text-sm sm:text-base">{gen.name}</div>
+                                                <div className="text-xs sm:text-sm text-gray-600 truncate">
+                                                    {gen.owned} owned | {formatNumber(gen.baseProduction * getCurrentMultiplier())}/s
+                                                </div>
+                                            </div>
+                                            <button
+                                                onClick={() => buyGenerator(gen.id)}
+                                                disabled={coins < gen.cost}
+                                                className={`px-4 sm:px-6 py-2 rounded-lg font-bold whitespace-nowrap text-sm sm:text-base touch-manipulation ${
+                                                    coins >= gen.cost
+                                                        ? 'bg-amber-500 text-white active:bg-amber-600'
+                                                        : 'bg-gray-300 text-gray-500'
+                                                }`}
+                                            >
+                                                {formatNumber(gen.cost)}
+                                            </button>
+                                        </div>
+                                    )
+                                ))}
+
+                                {['click', 'multiplier', 'automation'].includes(activeTab) && 
+                                    upgrades
+                                        .filter(u => u.category === activeTab)
+                                        .map(upgrade => (
+                                            <div key={upgrade.id} className={`flex items-center justify-between p-3 sm:p-4 rounded-lg border-2 ${
+                                                upgrade.owned 
+                                                    ? 'bg-gray-100 border-gray-300' 
+                                                    : 'bg-gradient-to-r from-blue-50 to-cyan-50 border-blue-200'
+                                            }`}>
+                                                <div className="flex-1 min-w-0 mr-2">
+                                                    <div className="font-bold text-gray-800 text-sm sm:text-base">{upgrade.name}</div>
+                                                    <div className="text-xs sm:text-sm text-gray-600">
+                                                        {upgrade.clickBonus && `+${upgrade.clickBonus} click`}
+                                                        {upgrade.multiplier && `${upgrade.multiplier}x boost`}
+                                                        {upgrade.autoClick && `${upgrade.autoClick} auto/s`}
+                                                    </div>
+                                                </div>
+                                                <button
+                                                    onClick={() => buyUpgrade(upgrade.id)}
+                                                    disabled={upgrade.owned || coins < upgrade.cost}
+                                                    className={`px-4 sm:px-6 py-2 rounded-lg font-bold whitespace-nowrap text-sm sm:text-base touch-manipulation ${
+                                                        upgrade.owned
+                                                            ? 'bg-green-500 text-white'
+                                                            : coins >= upgrade.cost
+                                                            ? 'bg-blue-500 text-white active:bg-blue-600'
+                                                            : 'bg-gray-300 text-gray-500'
+                                                    }`}
+                                                >
+                                                    {upgrade.owned ? 'OWNED' : formatNumber(upgrade.cost)}
+                                                </button>
+                                            </div>
+                                        ))
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<CoinEmpire />, document.getElementById('root'));
+    </script>
+</body>
+</html>
