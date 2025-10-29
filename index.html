@@ -19,11 +19,6 @@
         .no-tap-highlight {
             -webkit-tap-highlight-color: transparent;
         }
-        .coin-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
     </style>
 </head>
 <body class="no-tap-highlight">
@@ -36,18 +31,7 @@
     <script type="text/babel">
         const { useState, useEffect, useCallback } = React;
 
-        // Simple icon components using emojis
-        const Icons = {
-            Coins: () => <span className="coin-icon">💰</span>,
-            Zap: () => <span className="coin-icon">⚡</span>,
-            TrendingUp: () => <span className="coin-icon">📈</span>,
-            Target: () => <span className="coin-icon">🎯</span>,
-            Award: () => <span className="coin-icon">🏆</span>,
-            RefreshCw: () => <span className="coin-icon">🔄</span>
-        };
-
         function CoinEmpire() {
-            // Load saved game state
             const loadGame = () => {
                 try {
                     const saved = localStorage.getItem('coinEmpireGame');
@@ -67,36 +51,49 @@
             const [clickPower, setClickPower] = useState(savedGame?.clickPower || 1);
             const [coinsPerSecond, setCoinsPerSecond] = useState(0);
             const [prestigePoints, setPrestigePoints] = useState(savedGame?.prestigePoints || 0);
+            const [euros, setEuros] = useState(savedGame?.euros || 0);
             
             const [generators, setGenerators] = useState(savedGame?.generators || [
-                { id: 1, name: '🏦 Piggy Bank', cost: 10, owned: 0, baseProduction: 0.1, unlocked: true },
-                { id: 2, name: '⛲ Coin Fountain', cost: 100, owned: 0, baseProduction: 1, unlocked: false },
-                { id: 3, name: '⛏️ Gold Mine', cost: 1000, owned: 0, baseProduction: 8, unlocked: false },
-                { id: 4, name: '🏭 Mint Factory', cost: 10000, owned: 0, baseProduction: 50, unlocked: false },
-                { id: 5, name: '🏛️ Royal Treasury', cost: 100000, owned: 0, baseProduction: 300, unlocked: false },
-                { id: 6, name: '🖨️ Money Printer', cost: 1000000, owned: 0, baseProduction: 2000, unlocked: false },
+                { id: 1, name: 'Piggy Bank', cost: 10, owned: 0, baseProduction: 0.1, unlocked: true },
+                { id: 2, name: 'Coin Fountain', cost: 100, owned: 0, baseProduction: 1, unlocked: false },
+                { id: 3, name: 'Gold Mine', cost: 1000, owned: 0, baseProduction: 8, unlocked: false },
+                { id: 4, name: 'Mint Factory', cost: 10000, owned: 0, baseProduction: 50, unlocked: false },
+                { id: 5, name: 'Royal Treasury', cost: 100000, owned: 0, baseProduction: 300, unlocked: false },
+                { id: 6, name: 'Money Printer', cost: 1000000, owned: 0, baseProduction: 2000, unlocked: false },
             ]);
             
             const [upgrades, setUpgrades] = useState(savedGame?.upgrades || [
-                { id: 'click1', name: '👆 Better Fingers', cost: 50, clickBonus: 1, owned: false, category: 'click' },
-                { id: 'click2', name: '🍀 Lucky Coin', cost: 500, clickBonus: 5, owned: false, category: 'click' },
-                { id: 'click3', name: '✨ Golden Touch', cost: 5000, clickBonus: 25, owned: false, category: 'click' },
-                { id: 'click4', name: '👑 Midas Hand', cost: 50000, clickBonus: 100, owned: false, category: 'click' },
+                { id: 'click1', name: 'Better Fingers', cost: 50, clickBonus: 1, owned: false, category: 'click' },
+                { id: 'click2', name: 'Lucky Coin', cost: 500, clickBonus: 5, owned: false, category: 'click' },
+                { id: 'click3', name: 'Golden Touch', cost: 5000, clickBonus: 25, owned: false, category: 'click' },
+                { id: 'click4', name: 'Midas Hand', cost: 50000, clickBonus: 100, owned: false, category: 'click' },
                 
-                { id: 'multi1', name: '⚙️ Efficiency I', cost: 200, multiplier: 1.5, owned: false, category: 'multiplier' },
-                { id: 'multi2', name: '⚙️ Efficiency II', cost: 2000, multiplier: 2, owned: false, category: 'multiplier' },
-                { id: 'multi3', name: '⚙️ Efficiency III', cost: 20000, multiplier: 3, owned: false, category: 'multiplier' },
-                { id: 'multi4', name: '🚀 Quantum Boost', cost: 200000, multiplier: 5, owned: false, category: 'multiplier' },
+                { id: 'multi1', name: 'Efficiency I', cost: 200, multiplier: 1.5, owned: false, category: 'multiplier' },
+                { id: 'multi2', name: 'Efficiency II', cost: 2000, multiplier: 2, owned: false, category: 'multiplier' },
+                { id: 'multi3', name: 'Efficiency III', cost: 20000, multiplier: 3, owned: false, category: 'multiplier' },
+                { id: 'multi4', name: 'Quantum Boost', cost: 200000, multiplier: 5, owned: false, category: 'multiplier' },
                 
-                { id: 'auto1', name: '🤖 Auto Clicker I', cost: 1000, autoClick: 1, owned: false, category: 'automation' },
-                { id: 'auto2', name: '🤖 Auto Clicker II', cost: 10000, autoClick: 5, owned: false, category: 'automation' },
-                { id: 'auto3', name: '🤖 Auto Clicker III', cost: 100000, autoClick: 25, owned: false, category: 'automation' },
+                { id: 'auto1', name: 'Auto Clicker I', cost: 1000, autoClick: 1, owned: false, category: 'automation' },
+                { id: 'auto2', name: 'Auto Clicker II', cost: 10000, autoClick: 5, owned: false, category: 'automation' },
+                { id: 'auto3', name: 'Auto Clicker III', cost: 100000, autoClick: 25, owned: false, category: 'automation' },
+            ]);
+
+            const [items, setItems] = useState(savedGame?.items || [
+                { id: 'bike', name: '🚲 Bicycle', cost: 500, owned: 0, bonus: 0.05, category: 'transport' },
+                { id: 'phone', name: '📱 Smartphone', cost: 1000, owned: 0, bonus: 0.1, category: 'electronics' },
+                { id: 'laptop', name: '💻 Gaming Laptop', cost: 2000, owned: 0, bonus: 0.15, category: 'electronics' },
+                { id: 'motorcycle', name: '🏍️ Motorcycle', cost: 8000, owned: 0, bonus: 0.3, category: 'transport' },
+                { id: 'car', name: '🚗 Luxury Car', cost: 35000, owned: 0, bonus: 0.5, category: 'transport' },
+                { id: 'boat', name: '⛵ Yacht', cost: 150000, owned: 0, bonus: 1, category: 'transport' },
+                { id: 'apartment', name: '🏢 Apartment', cost: 250000, owned: 0, bonus: 2, category: 'property' },
+                { id: 'house', name: '🏠 House', cost: 500000, owned: 0, bonus: 3, category: 'property' },
+                { id: 'mansion', name: '🏰 Mansion', cost: 2000000, owned: 0, bonus: 5, category: 'property' },
+                { id: 'island', name: '🏝️ Private Island', cost: 10000000, owned: 0, bonus: 10, category: 'property' },
             ]);
 
             const [activeTab, setActiveTab] = useState('generators');
             const [clickAnimation, setClickAnimation] = useState(false);
 
-            // Save game state
             useEffect(() => {
                 const saveGame = () => {
                     try {
@@ -105,8 +102,10 @@
                             totalCoins,
                             clickPower,
                             prestigePoints,
+                            euros,
                             generators,
-                            upgrades
+                            upgrades,
+                            items
                         };
                         localStorage.setItem('coinEmpireGame', JSON.stringify(gameState));
                     } catch (e) {
@@ -116,7 +115,7 @@
 
                 const saveInterval = setInterval(saveGame, 2000);
                 return () => clearInterval(saveInterval);
-            }, [coins, totalCoins, clickPower, prestigePoints, generators, upgrades]);
+            }, [coins, totalCoins, clickPower, prestigePoints, euros, generators, upgrades, items]);
 
             const getCurrentMultiplier = useCallback(() => {
                 let multi = 1;
@@ -128,8 +127,14 @@
                         multi *= u.multiplier;
                     }
                 });
+                // Item bonuses
+                items.forEach(item => {
+                    if (item.owned > 0) {
+                        multi *= (1 + item.bonus * item.owned);
+                    }
+                });
                 return multi;
-            }, [upgrades, prestigePoints]);
+            }, [upgrades, prestigePoints, items]);
 
             useEffect(() => {
                 const multiplier = getCurrentMultiplier();
@@ -202,6 +207,23 @@
                 }
             };
 
+            const buyEuros = () => {
+                if (prestigePoints < 1) return;
+                const euroAmount = 1000; // 1 PP = €1000
+                setPrestigePoints(p => p - 1);
+                setEuros(e => e + euroAmount);
+            };
+
+            const buyItem = (id) => {
+                const item = items.find(i => i.id === id);
+                if (euros >= item.cost) {
+                    setEuros(e => e - item.cost);
+                    setItems(prev => prev.map(i => 
+                        i.id === id ? { ...i, owned: i.owned + 1 } : i
+                    ));
+                }
+            };
+
             const prestige = () => {
                 if (totalCoins >= 1000000) {
                     const points = Math.floor(Math.sqrt(totalCoins / 1000000));
@@ -227,8 +249,15 @@
                 return Math.floor(num).toLocaleString();
             };
 
+            const formatEuro = (num) => {
+                if (num >= 1e6) return '€' + (num / 1e6).toFixed(2) + 'M';
+                if (num >= 1e3) return '€' + (num / 1e3).toFixed(1) + 'K';
+                return '€' + Math.floor(num).toLocaleString();
+            };
+
             const canPrestige = totalCoins >= 1000000;
             const prestigeGain = canPrestige ? Math.floor(Math.sqrt(totalCoins / 1000000)) : 0;
+            const currentClickValue = Math.floor(clickPower * getCurrentMultiplier());
 
             return (
                 <div className="min-h-screen bg-gradient-to-br from-amber-100 via-yellow-50 to-orange-100 p-2 sm:p-4">
@@ -250,28 +279,48 @@
                                 </div>
                                 <div className="bg-gradient-to-br from-blue-100 to-cyan-100 p-2 sm:p-4 rounded-lg">
                                     <div className="text-xs sm:text-sm text-gray-600">Click Power</div>
-                                    <div className="text-lg sm:text-2xl font-bold text-blue-700">{formatNumber(clickPower * getCurrentMultiplier())}</div>
+                                    <div className="text-lg sm:text-2xl font-bold text-blue-700">{formatNumber(currentClickValue)}</div>
                                 </div>
                                 <div className="bg-gradient-to-br from-purple-100 to-pink-100 p-2 sm:p-4 rounded-lg">
                                     <div className="text-xs sm:text-sm text-gray-600">Prestige</div>
                                     <div className="text-lg sm:text-2xl font-bold text-purple-700">{prestigePoints}</div>
                                 </div>
                             </div>
+
+                            {prestigePoints > 0 && (
+                                <div className="mt-3 bg-gradient-to-r from-indigo-100 to-purple-100 p-3 rounded-lg border-2 border-indigo-300">
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <div className="text-sm font-bold text-indigo-900">💶 Euros: {formatEuro(euros)}</div>
+                                            <div className="text-xs text-indigo-700">Buy real-world items for passive bonuses!</div>
+                                        </div>
+                                        <button
+                                            onClick={buyEuros}
+                                            disabled={prestigePoints < 1}
+                                            className={`px-4 py-2 rounded-lg font-bold text-sm ${
+                                                prestigePoints >= 1
+                                                    ? 'bg-indigo-600 text-white hover:bg-indigo-700'
+                                                    : 'bg-gray-400 text-gray-600'
+                                            }`}
+                                        >
+                                            Buy €1000 (1 PP)
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
                         </div>
 
                         <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 mb-3 sm:mb-4">
                             <div className="flex flex-col items-center justify-center">
                                 <button
                                     onClick={handleClick}
-                                    className={`w-40 h-40 sm:w-48 sm:h-48 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 shadow-xl hover:shadow-2xl transition-all transform active:scale-95 flex items-center justify-center touch-manipulation text-6xl sm:text-8xl ${clickAnimation ? 'scale-110' : ''}`}
+                                    className={`w-40 h-40 sm:w-48 sm:h-48 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 shadow-xl hover:shadow-2xl transition-all transform active:scale-95 flex flex-col items-center justify-center touch-manipulation ${clickAnimation ? 'scale-110' : ''}`}
                                 >
-                                    💰
+                                    <div className="text-4xl sm:text-5xl font-bold text-white">+{formatNumber(currentClickValue)}</div>
+                                    <div className="text-xs sm:text-sm text-yellow-100 mt-1">per click</div>
                                 </button>
                                 <div className="mt-4 text-center">
                                     <div className="text-sm sm:text-lg text-gray-600">Tap to earn coins!</div>
-                                    <div className="text-2xl sm:text-3xl font-bold text-amber-600 mt-1 sm:mt-2">
-                                        +{formatNumber(clickPower * getCurrentMultiplier())}
-                                    </div>
                                 </div>
                                 
                                 {canPrestige && (
@@ -316,6 +365,15 @@
                                     <span>🏆</span>
                                     Auto
                                 </button>
+                                {prestigePoints > 0 && (
+                                    <button
+                                        onClick={() => setActiveTab('shop')}
+                                        className={`px-3 py-2 rounded-lg font-semibold flex items-center gap-1 sm:gap-2 whitespace-nowrap text-xs sm:text-base touch-manipulation ${activeTab === 'shop' ? 'bg-indigo-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+                                    >
+                                        <span>🛒</span>
+                                        Shop
+                                    </button>
+                                )}
                             </div>
 
                             <div className="space-y-2 max-h-[50vh] overflow-y-auto">
@@ -342,6 +400,43 @@
                                         </div>
                                     )
                                 ))}
+
+                                {activeTab === 'shop' && (
+                                    <>
+                                        <div className="bg-indigo-50 p-3 rounded-lg border-2 border-indigo-200 mb-3">
+                                            <div className="text-sm font-bold text-indigo-900 mb-1">💡 Shop Info</div>
+                                            <div className="text-xs text-indigo-700">
+                                                Items give permanent multiplier bonuses! Each item stacks with multiple purchases.
+                                            </div>
+                                        </div>
+                                        {items.map(item => (
+                                            <div key={item.id} className="flex items-center justify-between p-3 sm:p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg border-2 border-indigo-200">
+                                                <div className="flex-1 min-w-0 mr-2">
+                                                    <div className="font-bold text-gray-800 text-sm sm:text-base">{item.name}</div>
+                                                    <div className="text-xs sm:text-sm text-gray-600">
+                                                        Owned: {item.owned} | +{(item.bonus * 100).toFixed(0)}% production each
+                                                    </div>
+                                                    {item.owned > 0 && (
+                                                        <div className="text-xs text-green-600 font-semibold">
+                                                            Total bonus: +{(item.bonus * item.owned * 100).toFixed(0)}%
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <button
+                                                    onClick={() => buyItem(item.id)}
+                                                    disabled={euros < item.cost}
+                                                    className={`px-4 sm:px-6 py-2 rounded-lg font-bold whitespace-nowrap text-sm sm:text-base touch-manipulation ${
+                                                        euros >= item.cost
+                                                            ? 'bg-indigo-500 text-white active:bg-indigo-600'
+                                                            : 'bg-gray-300 text-gray-500'
+                                                    }`}
+                                                >
+                                                    {formatEuro(item.cost)}
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </>
+                                )}
 
                                 {['click', 'multiplier', 'automation'].includes(activeTab) && 
                                     upgrades
