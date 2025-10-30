@@ -103,6 +103,20 @@
         .dark-mode .bg-gray-300 {
             background-color: #475569 !important;
         }
+        .dark-mode .converter-box {
+            background: linear-gradient(135deg, #312e81 0%, #4c1d95 100%) !important;
+            border-color: #6366f1 !important;
+        }
+        .dark-mode .converter-box h3 {
+            color: #e0e7ff !important;
+        }
+        .dark-mode .converter-box p {
+            color: #c7d2fe !important;
+        }
+        .dark-mode .converter-box button:disabled {
+            background-color: #475569 !important;
+            color: #94a3b8 !important;
+        }
         
         .hamburger-icon {
             fill: currentColor;
@@ -918,7 +932,7 @@
                                     </div>
                                 </div>
 
-                                <div className="bg-gradient-to-r from-indigo-100 to-purple-100 p-4 rounded-lg border-2 border-indigo-300 mb-4">
+                                <div className="converter-box bg-gradient-to-r from-indigo-100 to-purple-100 p-4 rounded-lg border-2 border-indigo-300 mb-4">
                                     <h3 className="font-bold text-lg mb-3 text-gray-800">💱 PP to Euro Converter</h3>
                                     <p className="text-sm text-gray-600 mb-3">Exchange rate: 100 PP = €1</p>
                                     <div className="flex flex-wrap gap-2">
@@ -939,7 +953,7 @@
                                     </div>
                                 </div>
 
-                                <h3 className="font-bold text-lg mb-3 text-gray-800">🎁 Items (Each gives permanent multiplier!)</h3>
+                                <h3 className="card-header font-bold text-lg mb-3 text-gray-800">🎁 Items (Each gives permanent multiplier!)</h3>
                                 <div className="space-y-3 max-h-[50vh] overflow-y-auto">
                                     {SHOP_ITEMS.map(item => {
                                         const isPurchased = purchasedItems.includes(item.id);
