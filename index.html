@@ -312,15 +312,57 @@
             const [activeTab, setActiveTab] = useState('generators');
             const [clickAnimation, setClickAnimation] = useState(false);
             const [lastSaved, setLastSaved] = useState(new Date().toLocaleString());
+            const [purchasedItems, setPurchasedItems] = useState(savedGame?.purchasedItems || []);
 
             // Shop items
             const shopItems = [
-                { id: 'coffee', name: '☕ Coffee', euroCost: 1, ppReward: 10 },
-                { id: 'pizza', name: '🍕 Pizza', euroCost: 5, ppReward: 60 },
-                { id: 'headphones', name: '🎧 Headphones', euroCost: 50, ppReward: 700 },
-                { id: 'phone', name: '📱 Phone', euroCost: 500, ppReward: 8000 },
-                { id: 'laptop', name: '💻 Laptop', euroCost: 1000, ppReward: 20000 },
+                { id: 'coffee', name: '☕ Coffee', euroCost: 5, benefit: '2x Coin Multiplier', multiplier: 2 },
+                { id: 'pizza', name: '🍕 Pizza', euroCost: 25, benefit: '3x Coin Multiplier', multiplier: 3 },
+                { id: 'burger', name: '🍔 Burger', euroCost: 50, benefit: '4x Coin Multiplier', multiplier: 4 },
+                { id: 'sushi', name: '🍣 Sushi', euroCost: 100, benefit: '5x Coin Multiplier', multiplier: 5 },
+                { id: 'cake', name: '🍰 Cake', euroCost: 200, benefit: '6x Coin Multiplier', multiplier: 6 },
+                { id: 'watch', name: '⌚ Watch', euroCost: 500, benefit: '10x Coin Multiplier', multiplier: 10 },
+                { id: 'headphones', name: '🎧 Headphones', euroCost: 1000, benefit: '15x Coin Multiplier', multiplier: 15 },
+                { id: 'tablet', name: '📱 Tablet', euroCost: 2500, benefit: '25x Coin Multiplier', multiplier: 25 },
+                { id: 'console', name: '🎮 Game Console', euroCost: 5000, benefit: '50x Coin Multiplier', multiplier: 50 },
+                { id: 'bike', name: '🚲 Bicycle', euroCost: 10000, benefit: '100x Coin Multiplier', multiplier: 100 },
+                { id: 'laptop', name: '💻 Laptop', euroCost: 25000, benefit: '250x Coin Multiplier', multiplier: 250 },
+                { id: 'tv', name: '📺 4K TV', euroCost: 50000, benefit: '500x Coin Multiplier', multiplier: 500 },
+                { id: 'motorcycle', name: '🏍️ Motorcycle', euroCost: 100000, benefit: '1,000x Coin Multiplier', multiplier: 1000 },
+                { id: 'car', name: '🚗 Luxury Car', euroCost: 250000, benefit: '2,500x Coin Multiplier', multiplier: 2500 },
+                { id: 'boat', name: '⛵ Yacht', euroCost: 500000, benefit: '5,000x Coin Multiplier', multiplier: 5000 },
+                { id: 'house', name: '🏠 House', euroCost: 1000000, benefit: '10,000x Coin Multiplier', multiplier: 10000 },
+                { id: 'mansion', name: '🏰 Mansion', euroCost: 5000000, benefit: '50,000x Coin Multiplier', multiplier: 50000 },
+                { id: 'island', name: '🏝️ Private Island', euroCost: 10000000, benefit: '100,000x Coin Multiplier', multiplier: 100000 },
+                { id: 'rocket', name: '🚀 Space Rocket', euroCost: 50000000, benefit: '500,000x Coin Multiplier', multiplier: 500000 },
+                { id: 'universe', name: '🌌 Entire Universe', euroCost: 100000000, benefit: '1,000,000x Coin Multiplier - ENDGAME!', multiplier: 1000000 },
             ];
+
+            // Shop items
+            const shopItems = [
+                { id: 'coffee', name: '☕ Coffee', euroCost: 5, benefit: '2x Coin Multiplier', multiplier: 2 },
+                { id: 'pizza', name: '🍕 Pizza', euroCost: 25, benefit: '3x Coin Multiplier', multiplier: 3 },
+                { id: 'burger', name: '🍔 Burger', euroCost: 50, benefit: '4x Coin Multiplier', multiplier: 4 },
+                { id: 'sushi', name: '🍣 Sushi', euroCost: 100, benefit: '5x Coin Multiplier', multiplier: 5 },
+                { id: 'cake', name: '🍰 Cake', euroCost: 200, benefit: '6x Coin Multiplier', multiplier: 6 },
+                { id: 'watch', name: '⌚ Watch', euroCost: 500, benefit: '10x Coin Multiplier', multiplier: 10 },
+                { id: 'headphones', name: '🎧 Headphones', euroCost: 1000, benefit: '15x Coin Multiplier', multiplier: 15 },
+                { id: 'tablet', name: '📱 Tablet', euroCost: 2500, benefit: '25x Coin Multiplier', multiplier: 25 },
+                { id: 'console', name: '🎮 Game Console', euroCost: 5000, benefit: '50x Coin Multiplier', multiplier: 50 },
+                { id: 'bike', name: '🚲 Bicycle', euroCost: 10000, benefit: '100x Coin Multiplier', multiplier: 100 },
+                { id: 'laptop', name: '💻 Laptop', euroCost: 25000, benefit: '250x Coin Multiplier', multiplier: 250 },
+                { id: 'tv', name: '📺 4K TV', euroCost: 50000, benefit: '500x Coin Multiplier', multiplier: 500 },
+                { id: 'motorcycle', name: '🏍️ Motorcycle', euroCost: 100000, benefit: '1,000x Coin Multiplier', multiplier: 1000 },
+                { id: 'car', name: '🚗 Luxury Car', euroCost: 250000, benefit: '2,500x Coin Multiplier', multiplier: 2500 },
+                { id: 'boat', name: '⛵ Yacht', euroCost: 500000, benefit: '5,000x Coin Multiplier', multiplier: 5000 },
+                { id: 'house', name: '🏠 House', euroCost: 1000000, benefit: '10,000x Coin Multiplier', multiplier: 10000 },
+                { id: 'mansion', name: '🏰 Mansion', euroCost: 5000000, benefit: '50,000x Coin Multiplier', multiplier: 50000 },
+                { id: 'island', name: '🏝️ Private Island', euroCost: 10000000, benefit: '100,000x Coin Multiplier', multiplier: 100000 },
+                { id: 'rocket', name: '🚀 Space Rocket', euroCost: 50000000, benefit: '500,000x Coin Multiplier', multiplier: 500000 },
+                { id: 'universe', name: '🌌 Entire Universe', euroCost: 100000000, benefit: '1,000,000x Coin Multiplier - ENDGAME!', multiplier: 1000000 },
+            ];
+
+            const [purchasedItems, setPurchasedItems] = useState(savedGame?.purchasedItems || []);
 
             // Theme management
             useEffect(() => {
@@ -360,7 +402,8 @@
                             prestigePoints,
                             generators,
                             upgrades,
-                            euros
+                            euros,
+                            purchasedItems
                         };
                         localStorage.setItem('coinEmpireGame', JSON.stringify(gameState));
                         setLastSaved(new Date().toLocaleString());
@@ -371,7 +414,7 @@
 
                 const saveInterval = setInterval(saveGame, 2000);
                 return () => clearInterval(saveInterval);
-            }, [coins, totalCoins, clickPower, prestigePoints, generators, upgrades, euros]);
+            }, [coins, totalCoins, clickPower, prestigePoints, generators, upgrades, euros, purchasedItems]);
 
             const getCurrentMultiplier = useCallback(() => {
                 let multi = 1;
@@ -383,8 +426,14 @@
                         multi *= u.multiplier;
                     }
                 });
+                purchasedItems.forEach(itemId => {
+                    const item = shopItems.find(si => si.id === itemId);
+                    if (item && item.multiplier) {
+                        multi *= item.multiplier;
+                    }
+                });
                 return multi;
-            }, [upgrades, prestigePoints]);
+            }, [upgrades, prestigePoints, purchasedItems]);
 
             useEffect(() => {
                 const multiplier = getCurrentMultiplier();
@@ -495,9 +544,7 @@
             const prestige = () => {
                 if (totalCoins >= 1000000) {
                     const points = Math.floor(Math.sqrt(totalCoins / 1000000));
-                    const euroGain = Math.floor(totalCoins / 10000000); // 10M coins = 1 Euro
                     setPrestigePoints(p => p + points);
-                    setEuros(e => e + euroGain);
                     
                     setCoins(0);
                     setTotalCoins(0);
@@ -510,16 +557,26 @@
                     })));
                     setUpgrades(prev => prev.map(u => ({ ...u, owned: false })));
                     
-                    setSaveStatus(`Prestige! +${points} PP, +€${euroGain}`);
+                    setSaveStatus(`Prestige! +${points} PP`);
                     setTimeout(() => setSaveStatus(''), 3000);
                 }
             };
 
             const buyShopItem = (item) => {
-                if (euros >= item.euroCost) {
+                if (euros >= item.euroCost && !purchasedItems.includes(item.id)) {
                     setEuros(e => e - item.euroCost);
-                    setPrestigePoints(p => p + item.ppReward);
-                    setSaveStatus(`Purchased ${item.name}! +${item.ppReward} PP`);
+                    setPurchasedItems(prev => [...prev, item.id]);
+                    setSaveStatus(`Purchased ${item.name}! ${item.benefit}`);
+                    setTimeout(() => setSaveStatus(''), 3000);
+                }
+            };
+
+            const convertPPToEuros = (amount) => {
+                const ppCost = amount * 100; // 100 PP = €1
+                if (prestigePoints >= ppCost) {
+                    setPrestigePoints(p => p - ppCost);
+                    setEuros(e => e + amount);
+                    setSaveStatus(`Converted ${ppCost} PP to €${amount}`);
                     setTimeout(() => setSaveStatus(''), 2000);
                 }
             };
@@ -566,7 +623,8 @@
                     prestigePoints,
                     generators,
                     upgrades,
-                    euros
+                    euros,
+                    purchasedItems
                 };
                 const saveData = JSON.stringify(gameState);
                 const blob = new Blob([saveData], { type: 'application/json' });
@@ -593,6 +651,7 @@
                             setGenerators(gameState.generators || generators);
                             setUpgrades(gameState.upgrades || upgrades);
                             setEuros(gameState.euros || 0);
+                            setPurchasedItems(gameState.purchasedItems || []);
                             setSaveStatus('Game imported!');
                             setTimeout(() => setSaveStatus(''), 2000);
                         } catch (err) {
@@ -619,7 +678,8 @@
                     prestigePoints,
                     generators,
                     upgrades,
-                    euros
+                    euros,
+                    purchasedItems
                 };
                 localStorage.setItem('coinEmpireGame', JSON.stringify(gameState));
                 setSaveStatus('Game saved!');
@@ -706,7 +766,7 @@
                         {currentPage === 'home' && (
                             <>
                                 <div className="card bg-white rounded-lg shadow-lg p-3 sm:p-6 mb-3 sm:mb-4">
-                                    <div className="grid grid-cols-2 gap-2 sm:gap-4 text-center">
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-4 text-center">
                                         <div className="stat-card bg-gradient-to-br from-yellow-100 to-amber-100 p-2 sm:p-4 rounded-lg border-2 border-amber-200">
                                             <div className="stat-label text-xs sm:text-sm text-gray-600">Coins</div>
                                             <div className="stat-value text-lg sm:text-2xl font-bold text-amber-700">{formatNumber(coins)}</div>
@@ -722,6 +782,10 @@
                                         <div className="stat-card bg-gradient-to-br from-purple-100 to-pink-100 p-2 sm:p-4 rounded-lg border-2 border-purple-200">
                                             <div className="stat-label text-xs sm:text-sm text-gray-600">Prestige</div>
                                             <div className="stat-value text-lg sm:text-2xl font-bold text-purple-700">{formatNumber(prestigePoints)}</div>
+                                        </div>
+                                        <div className="stat-card bg-gradient-to-br from-emerald-100 to-teal-100 p-2 sm:p-4 rounded-lg border-2 border-emerald-200 col-span-2 sm:col-span-1">
+                                            <div className="stat-label text-xs sm:text-sm text-gray-600">Euros</div>
+                                            <div className="stat-value text-lg sm:text-2xl font-bold text-emerald-700">€{euros.toFixed(0)}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -882,31 +946,82 @@
                         {currentPage === 'shop' && (
                             <div className="card bg-white rounded-lg shadow-lg p-3 sm:p-6">
                                 <h2 className="card-header text-2xl font-bold text-amber-600 mb-4">🛒 Shop</h2>
-                                <div className="stat-card bg-gradient-to-r from-green-100 to-emerald-100 p-4 rounded-lg border-2 border-green-300 mb-4">
-                                    <div className="stat-label text-sm text-gray-600">Your Euros</div>
-                                    <div className="stat-value text-3xl font-bold text-green-700">€{euros.toFixed(2)}</div>
+                                
+                                {/* Currency Display */}
+                                <div className="grid grid-cols-2 gap-3 mb-4">
+                                    <div className="stat-card bg-gradient-to-r from-purple-100 to-pink-100 p-4 rounded-lg border-2 border-purple-300">
+                                        <div className="stat-label text-sm text-gray-600">Prestige Points</div>
+                                        <div className="stat-value text-2xl font-bold text-purple-700">{formatNumber(prestigePoints)}</div>
+                                    </div>
+                                    <div className="stat-card bg-gradient-to-r from-green-100 to-emerald-100 p-4 rounded-lg border-2 border-green-300">
+                                        <div className="stat-label text-sm text-gray-600">Euros</div>
+                                        <div className="stat-value text-2xl font-bold text-green-700">€{formatNumber(euros)}</div>
+                                    </div>
                                 </div>
-                                <p className="text-gray-600 mb-4 text-sm">Spend Euros to buy items and earn Prestige Points!</p>
-                                <div className="space-y-3">
-                                    {shopItems.map(item => (
-                                        <div key={item.id} className="upgrade-card flex items-center justify-between p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg border-2 border-indigo-200">
-                                            <div className="flex-1">
-                                                <div className="font-bold text-gray-800 text-lg">{item.name}</div>
-                                                <div className="text-sm text-gray-600">Cost: €{item.euroCost} → Reward: {item.ppReward} PP</div>
-                                            </div>
+
+                                {/* Converter */}
+                                <div className="bg-gradient-to-r from-indigo-100 to-purple-100 p-4 rounded-lg border-2 border-indigo-300 mb-4">
+                                    <h3 className="font-bold text-lg mb-3 text-gray-800">💱 PP to Euro Converter</h3>
+                                    <p className="text-sm text-gray-600 mb-3">Exchange rate: 100 PP = €1</p>
+                                    <div className="flex flex-wrap gap-2">
+                                        {[1, 10, 100, 1000, 10000].map(amount => (
                                             <button
-                                                onClick={() => buyShopItem(item)}
-                                                disabled={euros < item.euroCost}
-                                                className={`px-6 py-2 rounded-lg font-bold whitespace-nowrap ${
-                                                    euros >= item.euroCost
+                                                key={amount}
+                                                onClick={() => convertPPToEuros(amount)}
+                                                disabled={prestigePoints < amount * 100}
+                                                className={`px-4 py-2 rounded-lg font-bold ${
+                                                    prestigePoints >= amount * 100
                                                         ? 'bg-indigo-500 text-white hover:bg-indigo-600'
                                                         : 'bg-gray-300 text-gray-500'
                                                 }`}
                                             >
-                                                Buy
+                                                €{amount} ({amount * 100} PP)
                                             </button>
-                                        </div>
-                                    ))}
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <h3 className="font-bold text-lg mb-3 text-gray-800">🎁 Items (Each gives permanent multiplier!)</h3>
+                                <div className="space-y-3 max-h-[50vh] overflow-y-auto">
+                                    {shopItems.map(item => {
+                                        const isPurchased = purchasedItems.includes(item.id);
+                                        const isEndgame = item.id === 'universe';
+                                        return (
+                                            <div 
+                                                key={item.id} 
+                                                className={`upgrade-card flex items-center justify-between p-4 rounded-lg border-2 ${
+                                                    isEndgame 
+                                                        ? 'bg-gradient-to-r from-yellow-100 via-orange-100 to-red-100 border-yellow-500 shadow-lg'
+                                                        : isPurchased
+                                                        ? 'bg-green-100 border-green-300'
+                                                        : 'bg-gradient-to-r from-indigo-50 to-purple-50 border-indigo-200'
+                                                }`}
+                                            >
+                                                <div className="flex-1">
+                                                    <div className="font-bold text-gray-800 text-base sm:text-lg">
+                                                        {item.name} {isPurchased && '✅'}
+                                                    </div>
+                                                    <div className="text-xs sm:text-sm text-gray-600">{item.benefit}</div>
+                                                    <div className="text-xs sm:text-sm font-semibold text-indigo-600 mt-1">
+                                                        Cost: €{formatNumber(item.euroCost)}
+                                                    </div>
+                                                </div>
+                                                <button
+                                                    onClick={() => buyShopItem(item)}
+                                                    disabled={euros < item.euroCost || isPurchased}
+                                                    className={`px-4 sm:px-6 py-2 rounded-lg font-bold whitespace-nowrap text-sm sm:text-base ${
+                                                        isPurchased
+                                                            ? 'bg-green-500 text-white'
+                                                            : euros >= item.euroCost
+                                                            ? 'bg-indigo-500 text-white hover:bg-indigo-600'
+                                                            : 'bg-gray-300 text-gray-500'
+                                                    }`}
+                                                >
+                                                    {isPurchased ? 'OWNED' : 'Buy'}
+                                                </button>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             </div>
                         )}
