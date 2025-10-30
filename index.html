@@ -29,7 +29,6 @@
             -webkit-tap-highlight-color: transparent;
         }
         
-        /* Dark mode styles */
         body.dark-mode {
             background: linear-gradient(to bottom right, #0f172a, #1e293b, #334155) !important;
             min-height: 100vh !important;
@@ -105,7 +104,6 @@
             background-color: #475569 !important;
         }
         
-        /* Hamburger icon */
         .hamburger-icon {
             fill: currentColor;
         }
@@ -113,7 +111,6 @@
             color: #f1f5f9 !important;
         }
         
-        /* Menu drawer */
         .menu-overlay {
             position: fixed;
             top: 0;
@@ -231,6 +228,7 @@
             const [theme, setTheme] = useState(localStorage.getItem('coinEmpireTheme') || 'system');
             const [saveStatus, setSaveStatus] = useState('');
             const [euros, setEuros] = useState(savedGame?.euros || 0);
+            const [purchasedItems, setPurchasedItems] = useState(savedGame?.purchasedItems || []);
             
             const [generators, setGenerators] = useState(savedGame?.generators || [
                 { id: 1, name: 'Piggy Bank', cost: 10, owned: 0, baseProduction: 0.1, unlocked: true },
@@ -242,7 +240,6 @@
             ]);
             
             const [upgrades, setUpgrades] = useState(savedGame?.upgrades || [
-                // Click upgrades (20 total)
                 { id: 'click1', name: 'Better Fingers', cost: 50, clickBonus: 1, owned: false, category: 'click' },
                 { id: 'click2', name: 'Lucky Coin', cost: 500, clickBonus: 5, owned: false, category: 'click' },
                 { id: 'click3', name: 'Golden Touch', cost: 5000, clickBonus: 25, owned: false, category: 'click' },
@@ -264,7 +261,6 @@
                 { id: 'click19', name: 'Eternal Clicker', cost: 50000000000000000000, clickBonus: 3051757812500, owned: false, category: 'click' },
                 { id: 'click20', name: 'Supreme Being', cost: 500000000000000000000, clickBonus: 15258789062500, owned: false, category: 'click' },
                 
-                // Multiplier upgrades (20 total)
                 { id: 'multi1', name: 'Efficiency I', cost: 200, multiplier: 1.5, owned: false, category: 'multiplier' },
                 { id: 'multi2', name: 'Efficiency II', cost: 2000, multiplier: 2, owned: false, category: 'multiplier' },
                 { id: 'multi3', name: 'Efficiency III', cost: 20000, multiplier: 3, owned: false, category: 'multiplier' },
@@ -286,7 +282,6 @@
                 { id: 'multi19', name: 'Absolute Booster', cost: 200000000000000000000, multiplier: 250000, owned: false, category: 'multiplier' },
                 { id: 'multi20', name: 'Eternal Amplifier', cost: 2000000000000000000000, multiplier: 1000000, owned: false, category: 'multiplier' },
                 
-                // Automation upgrades (20 total)
                 { id: 'auto1', name: 'Auto Clicker I', cost: 1000, autoClick: 1, owned: false, category: 'automation' },
                 { id: 'auto2', name: 'Auto Clicker II', cost: 10000, autoClick: 5, owned: false, category: 'automation' },
                 { id: 'auto3', name: 'Auto Clicker III', cost: 100000, autoClick: 25, owned: false, category: 'automation' },
@@ -312,10 +307,8 @@
             const [activeTab, setActiveTab] = useState('generators');
             const [clickAnimation, setClickAnimation] = useState(false);
             const [lastSaved, setLastSaved] = useState(new Date().toLocaleString());
-            const [purchasedItems, setPurchasedItems] = useState(savedGame?.purchasedItems || []);
 
-            // Shop items
-            const shopItems = [
+            const SHOP_ITEMS = [
                 { id: 'coffee', name: '☕ Coffee', euroCost: 5, benefit: '2x Coin Multiplier', multiplier: 2 },
                 { id: 'pizza', name: '🍕 Pizza', euroCost: 25, benefit: '3x Coin Multiplier', multiplier: 3 },
                 { id: 'burger', name: '🍔 Burger', euroCost: 50, benefit: '4x Coin Multiplier', multiplier: 4 },
@@ -338,33 +331,6 @@
                 { id: 'universe', name: '🌌 Entire Universe', euroCost: 100000000, benefit: '1,000,000x Coin Multiplier - ENDGAME!', multiplier: 1000000 },
             ];
 
-            // Shop items
-            const shopItems = [
-                { id: 'coffee', name: '☕ Coffee', euroCost: 5, benefit: '2x Coin Multiplier', multiplier: 2 },
-                { id: 'pizza', name: '🍕 Pizza', euroCost: 25, benefit: '3x Coin Multiplier', multiplier: 3 },
-                { id: 'burger', name: '🍔 Burger', euroCost: 50, benefit: '4x Coin Multiplier', multiplier: 4 },
-                { id: 'sushi', name: '🍣 Sushi', euroCost: 100, benefit: '5x Coin Multiplier', multiplier: 5 },
-                { id: 'cake', name: '🍰 Cake', euroCost: 200, benefit: '6x Coin Multiplier', multiplier: 6 },
-                { id: 'watch', name: '⌚ Watch', euroCost: 500, benefit: '10x Coin Multiplier', multiplier: 10 },
-                { id: 'headphones', name: '🎧 Headphones', euroCost: 1000, benefit: '15x Coin Multiplier', multiplier: 15 },
-                { id: 'tablet', name: '📱 Tablet', euroCost: 2500, benefit: '25x Coin Multiplier', multiplier: 25 },
-                { id: 'console', name: '🎮 Game Console', euroCost: 5000, benefit: '50x Coin Multiplier', multiplier: 50 },
-                { id: 'bike', name: '🚲 Bicycle', euroCost: 10000, benefit: '100x Coin Multiplier', multiplier: 100 },
-                { id: 'laptop', name: '💻 Laptop', euroCost: 25000, benefit: '250x Coin Multiplier', multiplier: 250 },
-                { id: 'tv', name: '📺 4K TV', euroCost: 50000, benefit: '500x Coin Multiplier', multiplier: 500 },
-                { id: 'motorcycle', name: '🏍️ Motorcycle', euroCost: 100000, benefit: '1,000x Coin Multiplier', multiplier: 1000 },
-                { id: 'car', name: '🚗 Luxury Car', euroCost: 250000, benefit: '2,500x Coin Multiplier', multiplier: 2500 },
-                { id: 'boat', name: '⛵ Yacht', euroCost: 500000, benefit: '5,000x Coin Multiplier', multiplier: 5000 },
-                { id: 'house', name: '🏠 House', euroCost: 1000000, benefit: '10,000x Coin Multiplier', multiplier: 10000 },
-                { id: 'mansion', name: '🏰 Mansion', euroCost: 5000000, benefit: '50,000x Coin Multiplier', multiplier: 50000 },
-                { id: 'island', name: '🏝️ Private Island', euroCost: 10000000, benefit: '100,000x Coin Multiplier', multiplier: 100000 },
-                { id: 'rocket', name: '🚀 Space Rocket', euroCost: 50000000, benefit: '500,000x Coin Multiplier', multiplier: 500000 },
-                { id: 'universe', name: '🌌 Entire Universe', euroCost: 100000000, benefit: '1,000,000x Coin Multiplier - ENDGAME!', multiplier: 1000000 },
-            ];
-
-            const [purchasedItems, setPurchasedItems] = useState(savedGame?.purchasedItems || []);
-
-            // Theme management
             useEffect(() => {
                 const applyTheme = () => {
                     if (theme === 'dark') {
@@ -427,7 +393,7 @@
                     }
                 });
                 purchasedItems.forEach(itemId => {
-                    const item = shopItems.find(si => si.id === itemId);
+                    const item = SHOP_ITEMS.find(si => si.id === itemId);
                     if (item && item.multiplier) {
                         multi *= item.multiplier;
                     }
@@ -572,7 +538,7 @@
             };
 
             const convertPPToEuros = (amount) => {
-                const ppCost = amount * 100; // 100 PP = €1
+                const ppCost = amount * 100;
                 if (prestigePoints >= ppCost) {
                     setPrestigePoints(p => p - ppCost);
                     setEuros(e => e + amount);
@@ -696,10 +662,8 @@
 
             return (
                 <div style={{minHeight: '100vh', height: '100%'}} className="bg-gradient-to-br from-amber-100 via-yellow-50 to-orange-100">
-                    {/* Menu Overlay */}
                     <div className={`menu-overlay ${menuOpen ? 'active' : ''}`} onClick={() => setMenuOpen(false)}></div>
                     
-                    {/* Hamburger Menu Drawer */}
                     <div className={`menu-drawer ${menuOpen ? 'active' : ''}`}>
                         <div className="p-6">
                             <h2 className="text-2xl font-bold mb-6 text-amber-600">Menu</h2>
@@ -746,7 +710,6 @@
                     </div>
 
                     <div className="max-w-6xl mx-auto p-2 sm:p-4">
-                        {/* Header with Hamburger */}
                         <div className="flex items-center justify-between mb-3 sm:mb-4">
                             <button
                                 onClick={() => setMenuOpen(true)}
@@ -762,7 +725,6 @@
                             <div className="w-10"></div>
                         </div>
 
-                        {/* Home Page */}
                         {currentPage === 'home' && (
                             <>
                                 <div className="card bg-white rounded-lg shadow-lg p-3 sm:p-6 mb-3 sm:mb-4">
@@ -785,7 +747,7 @@
                                         </div>
                                         <div className="stat-card bg-gradient-to-br from-emerald-100 to-teal-100 p-2 sm:p-4 rounded-lg border-2 border-emerald-200 col-span-2 sm:col-span-1">
                                             <div className="stat-label text-xs sm:text-sm text-gray-600">Euros</div>
-                                            <div className="stat-value text-lg sm:text-2xl font-bold text-emerald-700">€{euros.toFixed(0)}</div>
+                                            <div className="stat-value text-lg sm:text-2xl font-bold text-emerald-700">€{formatNumber(euros)}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -819,7 +781,6 @@
                             </>
                         )}
 
-                        {/* Upgrades Page */}
                         {currentPage === 'upgrades' && (
                             <div className="card bg-white rounded-lg shadow-lg p-3 sm:p-6">
                                 <div className="flex gap-1 sm:gap-2 mb-3 sm:mb-4 overflow-x-auto pb-2">
@@ -942,12 +903,10 @@
                             </div>
                         )}
 
-                        {/* Shop Page */}
                         {currentPage === 'shop' && (
                             <div className="card bg-white rounded-lg shadow-lg p-3 sm:p-6">
                                 <h2 className="card-header text-2xl font-bold text-amber-600 mb-4">🛒 Shop</h2>
                                 
-                                {/* Currency Display */}
                                 <div className="grid grid-cols-2 gap-3 mb-4">
                                     <div className="stat-card bg-gradient-to-r from-purple-100 to-pink-100 p-4 rounded-lg border-2 border-purple-300">
                                         <div className="stat-label text-sm text-gray-600">Prestige Points</div>
@@ -959,7 +918,6 @@
                                     </div>
                                 </div>
 
-                                {/* Converter */}
                                 <div className="bg-gradient-to-r from-indigo-100 to-purple-100 p-4 rounded-lg border-2 border-indigo-300 mb-4">
                                     <h3 className="font-bold text-lg mb-3 text-gray-800">💱 PP to Euro Converter</h3>
                                     <p className="text-sm text-gray-600 mb-3">Exchange rate: 100 PP = €1</p>
@@ -983,7 +941,7 @@
 
                                 <h3 className="font-bold text-lg mb-3 text-gray-800">🎁 Items (Each gives permanent multiplier!)</h3>
                                 <div className="space-y-3 max-h-[50vh] overflow-y-auto">
-                                    {shopItems.map(item => {
+                                    {SHOP_ITEMS.map(item => {
                                         const isPurchased = purchasedItems.includes(item.id);
                                         const isEndgame = item.id === 'universe';
                                         return (
@@ -1026,7 +984,6 @@
                             </div>
                         )}
 
-                        {/* Settings Page */}
                         {currentPage === 'settings' && (
                             <div className="card bg-white rounded-lg shadow-lg p-3 sm:p-6">
                                 <h2 className="card-header text-2xl font-bold text-amber-600 mb-4">⚙️ Settings</h2>
