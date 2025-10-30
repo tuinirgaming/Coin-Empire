@@ -3,174 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Coin Empire">
     <title>Coin Empire - Idle Clicker</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkNvaW4gRW1waXJlIiwKICAic2hvcnRfbmFtZSI6ICJDb2luIEVtcGlyZSIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjZmZmZmZmIiwKICAidGhlbWVfY29sb3IiOiAiI2Y1OTUwZiIsCiAgImljb25zIjogW10KfQ==">
     <style>
         body {
             overscroll-behavior: none;
             -webkit-user-select: none;
             user-select: none;
             touch-action: manipulation;
-            transition: background-color 0.3s, color 0.3s;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-        }
-        html {
-            min-height: 100vh;
-            height: 100%;
-        }
-        #root {
-            min-height: 100vh;
-            height: 100%;
         }
         .no-tap-highlight {
             -webkit-tap-highlight-color: transparent;
-        }
-        
-        /* Dark mode styles */
-        body.dark-mode {
-            background: linear-gradient(to bottom right, #0f172a, #1e293b, #334155) !important;
-            min-height: 100vh !important;
-            height: 100% !important;
-        }
-        body.dark-mode::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(to bottom right, #0f172a, #1e293b, #334155);
-            z-index: -1;
-        }
-        body.dark-mode #root > div {
-            background: transparent !important;
-        }
-        .dark-mode .card {
-            background-color: #1e293b !important;
-            border-color: #334155 !important;
-        }
-        .dark-mode .card-header {
-            color: #f1f5f9 !important;
-        }
-        .dark-mode .text-primary {
-            color: #fbbf24 !important;
-        }
-        .dark-mode .text-secondary {
-            color: #cbd5e1 !important;
-        }
-        .dark-mode .text-muted {
-            color: #94a3b8 !important;
-        }
-        .dark-mode .stat-card {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
-            border-color: #475569 !important;
-        }
-        .dark-mode .stat-value {
-            color: #f1f5f9 !important;
-        }
-        .dark-mode .stat-label {
-            color: #94a3b8 !important;
-        }
-        .dark-mode .menu-item {
-            color: #e2e8f0 !important;
-        }
-        .dark-mode .menu-item:hover:not(.bg-amber-500):not(.bg-blue-500):not(.bg-indigo-500):not(.bg-gray-700) {
-            background-color: #334155 !important;
-        }
-        .dark-mode .upgrade-card {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
-            border-color: #475569 !important;
-        }
-        .dark-mode .upgrade-card .text-gray-800 {
-            color: #f1f5f9 !important;
-        }
-        .dark-mode .upgrade-card .text-gray-600 {
-            color: #cbd5e1 !important;
-        }
-        .dark-mode .bg-gray-100 {
-            background-color: #334155 !important;
-        }
-        .dark-mode .bg-gray-200 {
-            background-color: #475569 !important;
-        }
-        .dark-mode .text-gray-700 {
-            color: #e2e8f0 !important;
-        }
-        .dark-mode .text-gray-800 {
-            color: #f1f5f9 !important;
-        }
-        .dark-mode .text-gray-600 {
-            color: #cbd5e1 !important;
-        }
-        .dark-mode .text-gray-500 {
-            color: #94a3b8 !important;
-        }
-        .dark-mode .border-gray-300 {
-            border-color: #475569 !important;
-        }
-        .dark-mode .hamburger-icon {
-            color: #f1f5f9 !important;
-        }
-        .dark-mode .hamburger-icon:hover {
-            background-color: #334155 !important;
-        }
-        
-        /* Hamburger menu */
-        .menu-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 40;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-        }
-        .menu-overlay.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-        .menu-drawer {
-            position: fixed;
-            top: 0;
-            left: -280px;
-            width: 280px;
-            height: 100%;
-            background: white;
-            z-index: 50;
-            transition: left 0.3s;
-            overflow-y: auto;
-        }
-        .dark-mode .menu-drawer {
-            background: #1e293b;
-        }
-        .dark-mode .menu-drawer h2 {
-            color: #fbbf24 !important;
-        }
-        .menu-drawer.active {
-            left: 0;
         }
     </style>
 </head>
 <body class="no-tap-highlight">
     <div id="root"></div>
     
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://unpkg.com/lucide-react@0.263.1/dist/umd/lucide-react.js"></script>
     
     <script type="text/babel">
         const { useState, useEffect, useCallback } = React;
-        const { Coins, Zap, TrendingUp, Target, Award, RefreshCw } = lucide;
+
+        // Simple icon components
+        const Coins = ({ className }) => (
+            <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="8" cy="8" r="6"/>
+                <path d="M18.09 10.37A6 6 0 1 1 10.34 18"/>
+                <path d="M7 6h1v4"/>
+                <path d="m16.71 13.88.7.71-2.82 2.82"/>
+            </svg>
+        );
+
+        const Zap = ({ className }) => (
+            <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+            </svg>
+        );
+
+        const TrendingUp = ({ className }) => (
+            <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                <polyline points="17 6 23 6 23 12"/>
+            </svg>
+        );
+
+        const Target = ({ className }) => (
+            <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="12" cy="12" r="10"/>
+                <circle cx="12" cy="12" r="6"/>
+                <circle cx="12" cy="12" r="2"/>
+            </svg>
+        );
+
+        const Award = ({ className }) => (
+            <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="12" cy="8" r="7"/>
+                <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>
+            </svg>
+        );
+
+        const RefreshCw = ({ className }) => (
+            <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polyline points="23 4 23 10 17 10"/>
+                <polyline points="1 20 1 14 7 14"/>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+            </svg>
+        );
 
         function CoinEmpire() {
             const loadGame = () => {
@@ -233,54 +138,17 @@
 
             const [activeTab, setActiveTab] = useState('generators');
             const [clickAnimation, setClickAnimation] = useState(false);
-            const [saveStatus, setSaveStatus] = useState('');
-            const [lastSaved, setLastSaved] = useState(savedGame?.lastSaved || null);
-            const [theme, setTheme] = useState(savedGame?.theme || 'system');
-            const [menuOpen, setMenuOpen] = useState(false);
-            const [, setTick] = useState(0);
-
-            // Theme management
-            useEffect(() => {
-                const applyTheme = (themeSetting) => {
-                    if (themeSetting === 'dark') {
-                        document.body.classList.add('dark-mode');
-                    } else if (themeSetting === 'light') {
-                        document.body.classList.remove('dark-mode');
-                    } else {
-                        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                        if (prefersDark) {
-                            document.body.classList.add('dark-mode');
-                        } else {
-                            document.body.classList.remove('dark-mode');
-                        }
-                    }
-                };
-
-                applyTheme(theme);
-
-                const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-                const handleChange = () => {
-                    if (theme === 'system') {
-                        applyTheme('system');
-                    }
-                };
-                mediaQuery.addEventListener('change', handleChange);
-                return () => mediaQuery.removeEventListener('change', handleChange);
-            }, [theme]);
-
-            useEffect(() => {
-                const interval = setInterval(() => {
-                    setTick(t => t + 1);
-                }, 10000);
-                return () => clearInterval(interval);
-            }, []);
 
             useEffect(() => {
                 const saveGame = () => {
                     try {
                         const gameState = {
-                            coins, totalCoins, clickPower, prestigePoints, euros,
-                            generators, upgrades, items, lastSaved: now, theme
+                            coins,
+                            totalCoins,
+                            clickPower,
+                            prestigePoints,
+                            generators,
+                            upgrades
                         };
                         localStorage.setItem('coinEmpireGame', JSON.stringify(gameState));
                     } catch (e) {
@@ -429,91 +297,6 @@
                 }
             };
 
-            const manualSave = () => {
-                try {
-                    const now = new Date().toISOString();
-                    const gameState = {
-                        coins, totalCoins, clickPower, prestigePoints, euros,
-                        generators, upgrades, items, lastSaved: now, theme
-                    };
-                    localStorage.setItem('coinEmpireGame', JSON.stringify(gameState));
-                    setLastSaved(now);
-                    setSaveStatus('✓ Game Saved!');
-                    setTimeout(() => setSaveStatus(''), 3000);
-                } catch (e) {
-                    setSaveStatus('✗ Save failed');
-                }
-            };
-
-            const exportSave = () => {
-                try {
-                    const gameState = {
-                        coins, totalCoins, clickPower, prestigePoints, euros,
-                        generators, upgrades, items, lastSaved: new Date().toISOString(), theme
-                    };
-                    const saveData = btoa(JSON.stringify(gameState));
-                    const blob = new Blob([saveData], { type: 'text/plain' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'coin-empire-save.txt';
-                    a.click();
-                    setSaveStatus('✓ Exported!');
-                    setTimeout(() => setSaveStatus(''), 3000);
-                } catch (e) {
-                    setSaveStatus('✗ Export failed');
-                }
-            };
-
-            const importSave = () => {
-                const input = document.createElement('input');
-                input.type = 'file';
-                input.accept = '.txt';
-                input.onchange = (e) => {
-                    const file = e.target.files[0];
-                    if (!file) return;
-                    
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        try {
-                            const decoded = atob(event.target.result);
-                            const gameState = JSON.parse(decoded);
-                            
-                            setCoins(gameState.coins || 0);
-                            setTotalCoins(gameState.totalCoins || 0);
-                            setClickPower(gameState.clickPower || 1);
-                            setPrestigePoints(gameState.prestigePoints || 0);
-                            setEuros(gameState.euros || 0);
-                            setGenerators(gameState.generators);
-                            setUpgrades(gameState.upgrades);
-                            setItems(gameState.items);
-                            setLastSaved(gameState.lastSaved);
-                            setTheme(gameState.theme || 'system');
-                            
-                            localStorage.setItem('coinEmpireGame', JSON.stringify(gameState));
-                            setSaveStatus('✓ Imported!');
-                            setTimeout(() => setSaveStatus(''), 3000);
-                        } catch (e) {
-                            setSaveStatus('✗ Invalid save file');
-                        }
-                    };
-                    reader.readAsText(file);
-                };
-                input.click();
-            };
-
-            const resetGame = () => {
-                if (confirm('Are you sure? This will delete ALL progress!')) {
-                    localStorage.removeItem('coinEmpireGame');
-                    window.location.reload();
-                }
-            };
-
-            const navigateTo = (page) => {
-                setCurrentPage(page);
-                setMenuOpen(false);
-            };
-
             const formatNumber = (num) => {
                 const suffixes = [
                     { value: 1e63, symbol: 'Vg' },
@@ -552,90 +335,30 @@
             const prestigeGain = canPrestige ? Math.floor(Math.sqrt(totalCoins / 1000000)) : 0;
 
             return (
-                <div style={{minHeight: '100vh'}} className="app-wrapper bg-gradient-to-br from-amber-100 via-yellow-50 to-orange-100">
-                    {/* Menu Overlay */}
-                    <div className={`menu-overlay ${menuOpen ? 'active' : ''}`} onClick={() => setMenuOpen(false)}></div>
-                    
-                    {/* Hamburger Menu Drawer */}
-                    <div className={`menu-drawer ${menuOpen ? 'active' : ''}`}>
-                        <div className="p-6">
-                            <h2 className="text-2xl font-bold card-header mb-6">Menu</h2>
-                            <div className="space-y-2">
-                                <button
-                                    onClick={() => navigateTo('home')}
-                                    className={`w-full text-left px-4 py-3 rounded-lg font-semibold menu-item ${
-                                        currentPage === 'home' ? 'bg-amber-500 text-white' : 'hover:bg-gray-100'
-                                    }`}
-                                >
-                                    🏠 Home
-                                </button>
-                                <button
-                                    onClick={() => navigateTo('upgrades')}
-                                    className={`w-full text-left px-4 py-3 rounded-lg font-semibold menu-item ${
-                                        currentPage === 'upgrades' ? 'bg-blue-500 text-white' : 'hover:bg-gray-100'
-                                    }`}
-                                >
-                                    ⬆️ Upgrades
-                                </button>
-                                <button
-                                    onClick={() => navigateTo('shop')}
-                                    className={`w-full text-left px-4 py-3 rounded-lg font-semibold menu-item ${
-                                        currentPage === 'shop' ? 'bg-indigo-500 text-white' : 'hover:bg-gray-100'
-                                    }`}
-                                >
-                                    🛒 Shop
-                                </button>
-                                <button
-                                    onClick={() => navigateTo('settings')}
-                                    className={`w-full text-left px-4 py-3 rounded-lg font-semibold menu-item ${
-                                        currentPage === 'settings' ? 'bg-gray-700 text-white' : 'hover:bg-gray-100'
-                                    }`}
-                                >
-                                    ⚙️ Settings
-                                </button>
-                            </div>
-                            {saveStatus && (
-                                <div className="mt-4 text-sm text-center text-green-400 font-semibold">
-                                    {saveStatus}
-                                </div>
-                            )}
-                        </div>
-                    </div>
-
-                    {/* Main Content */}
-                    <div className="max-w-6xl mx-auto min-h-screen flex flex-col p-2 sm:p-4" style={{minHeight: '100vh'}}>
-                        {/* Header */}
-                        <div className="card rounded-lg shadow-lg p-3 sm:p-6 mb-3">
-                            <div className="flex items-center mb-3">
-                                <button
-                                    onClick={() => setMenuOpen(!menuOpen)}
-                                    className="hamburger-icon mr-4 p-2 rounded-lg hover:bg-gray-100"
-                                >
-                                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
-                                    </svg>
-                                </button>
-                                <h1 className="text-3xl sm:text-5xl font-bold text-primary flex-1 text-center mr-10">
-                                    Coin Empire
-                                </h1>
-                            </div>
+                <div className="min-h-screen bg-gradient-to-br from-amber-100 via-yellow-50 to-orange-100 p-2 sm:p-4">
+                    <div className="max-w-6xl mx-auto">
+                        <div className="bg-white rounded-lg shadow-lg p-3 sm:p-6 mb-3 sm:mb-4">
+                            <h1 className="text-3xl sm:text-5xl font-bold text-amber-600 mb-3 sm:mb-4 text-center flex items-center justify-center gap-2">
+                                <Coins className="w-8 h-8 sm:w-12 sm:h-12" />
+                                Coin Empire
+                            </h1>
                             
-                            <div className="grid grid-cols-2 gap-2 sm:gap-4 text-center mb-3">
-                                <div className="stat-card p-2 sm:p-4 rounded-lg">
-                                    <div className="text-xs sm:text-sm stat-label">Coins</div>
-                                    <div className="text-lg sm:text-2xl font-bold stat-value">{formatNumber(coins)}</div>
+                            <div className="grid grid-cols-2 gap-2 sm:gap-4 text-center">
+                                <div className="bg-gradient-to-br from-yellow-100 to-amber-100 p-2 sm:p-4 rounded-lg">
+                                    <div className="text-xs sm:text-sm text-gray-600">Coins</div>
+                                    <div className="text-lg sm:text-2xl font-bold text-amber-700">{formatNumber(coins)}</div>
                                 </div>
-                                <div className="stat-card p-2 sm:p-4 rounded-lg">
-                                    <div className="text-xs sm:text-sm stat-label">Per Second</div>
-                                    <div className="text-lg sm:text-2xl font-bold stat-value">{formatNumber(coinsPerSecond)}</div>
+                                <div className="bg-gradient-to-br from-green-100 to-emerald-100 p-2 sm:p-4 rounded-lg">
+                                    <div className="text-xs sm:text-sm text-gray-600">Per Second</div>
+                                    <div className="text-lg sm:text-2xl font-bold text-green-700">{formatNumber(coinsPerSecond)}</div>
                                 </div>
-                                <div className="stat-card p-2 sm:p-4 rounded-lg">
-                                    <div className="text-xs sm:text-sm stat-label">Click Power</div>
-                                    <div className="text-lg sm:text-2xl font-bold stat-value">{formatNumber(currentClickValue)}</div>
+                                <div className="bg-gradient-to-br from-blue-100 to-cyan-100 p-2 sm:p-4 rounded-lg">
+                                    <div className="text-xs sm:text-sm text-gray-600">Click Power</div>
+                                    <div className="text-lg sm:text-2xl font-bold text-blue-700">{formatNumber(clickPower * getCurrentMultiplier())}</div>
                                 </div>
-                                <div className="stat-card p-2 sm:p-4 rounded-lg">
-                                    <div className="text-xs sm:text-sm stat-label">Prestige</div>
-                                    <div className="text-lg sm:text-2xl font-bold stat-value">{prestigePoints}</div>
+                                <div className="bg-gradient-to-br from-purple-100 to-pink-100 p-2 sm:p-4 rounded-lg">
+                                    <div className="text-xs sm:text-sm text-gray-600">Prestige</div>
+                                    <div className="text-lg sm:text-2xl font-bold text-purple-700">{formatNumber(prestigePoints)}</div>
                                 </div>
                             </div>
                         </div>
@@ -654,13 +377,8 @@
                                         +{formatNumber(clickPower * getCurrentMultiplier())}
                                     </div>
                                 </div>
-                            )}
-                        </div>
-
-                        {/* Page Content - Fills remaining space */}
-                        <div className="flex-1 overflow-auto">
-                            {currentPage === 'home' && (
-                                <div className="card rounded-lg shadow-lg p-4 sm:p-6 h-full flex flex-col items-center justify-center">
+                                
+                                {canPrestige && (
                                     <button
                                         onClick={prestige}
                                         className="mt-4 px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg font-bold hover:from-purple-600 hover:to-pink-600 transition-all flex items-center gap-2 touch-manipulation text-sm sm:text-base"
@@ -668,235 +386,128 @@
                                         <RefreshCw className="w-4 h-4 sm:w-5 sm:h-5" />
                                         Prestige (+{formatNumber(prestigeGain)} PP)
                                     </button>
-                                    <div className="mt-6 text-center">
-                                        <div className="text-sm sm:text-lg text-secondary">Tap to earn coins!</div>
-                                    </div>
-                                    
-                                    {canPrestige && (
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="bg-white rounded-lg shadow-lg p-3 sm:p-6">
+                            <div className="flex gap-1 sm:gap-2 mb-3 sm:mb-4 overflow-x-auto pb-2">
+                                <button
+                                    onClick={() => setActiveTab('generators')}
+                                    className={`px-3 py-2 rounded-lg font-semibold flex items-center gap-1 sm:gap-2 whitespace-nowrap text-xs sm:text-base touch-manipulation ${activeTab === 'generators' ? 'bg-amber-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+                                >
+                                    <Zap className="w-3 h-3 sm:w-4 sm:h-4" />
+                                    Generators
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab('click')}
+                                    className={`px-3 py-2 rounded-lg font-semibold flex items-center gap-1 sm:gap-2 whitespace-nowrap text-xs sm:text-base touch-manipulation ${activeTab === 'click' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+                                >
+                                    <Target className="w-3 h-3 sm:w-4 sm:h-4" />
+                                    Click
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab('multiplier')}
+                                    className={`px-3 py-2 rounded-lg font-semibold flex items-center gap-1 sm:gap-2 whitespace-nowrap text-xs sm:text-base touch-manipulation ${activeTab === 'multiplier' ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+                                >
+                                    <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4" />
+                                    Boost
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab('automation')}
+                                    className={`px-3 py-2 rounded-lg font-semibold flex items-center gap-1 sm:gap-2 whitespace-nowrap text-xs sm:text-base touch-manipulation ${activeTab === 'automation' ? 'bg-purple-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+                                >
+                                    <Award className="w-3 h-3 sm:w-4 sm:h-4" />
+                                    Auto
+                                </button>
+                            </div>
+
+                            {activeTab === 'generators' && (
+                                <div className="mb-3 flex gap-1 sm:gap-2 flex-wrap">
+                                    {[1, 10, 50, 100, 'max'].map(amount => (
                                         <button
-                                            onClick={prestige}
-                                            className="mt-6 px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg font-bold hover:from-purple-600 hover:to-pink-600 transition-all flex items-center gap-2 touch-manipulation text-sm sm:text-base"
+                                            key={amount}
+                                            onClick={() => setBuyAmount(amount)}
+                                            className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg font-bold text-xs sm:text-sm touch-manipulation ${
+                                                buyAmount === amount
+                                                    ? 'bg-amber-600 text-white'
+                                                    : 'bg-gray-200 text-gray-700'
+                                            }`}
                                         >
                                             {amount === 'max' ? 'MAX' : `x${amount}`}
                                         </button>
-                                    )}
+                                    ))}
                                 </div>
                             )}
 
-                            {currentPage === 'upgrades' && (
-                                <div className="card rounded-lg shadow-lg p-3 sm:p-6 h-full flex flex-col">
-                                    <h2 className="text-2xl font-bold card-header mb-3 text-center">Upgrades</h2>
-                                    
-                                    <div className="flex gap-1 sm:gap-2 mb-3 overflow-x-auto pb-2">
-                                        <button
-                                            onClick={() => setUpgradeTab('generators')}
-                                            className={`px-3 py-2 rounded-lg font-semibold whitespace-nowrap text-xs sm:text-base ${upgradeTab === 'generators' ? 'bg-amber-500 text-white' : 'bg-gray-200 text-gray-700'}`}
-                                        >
-                                            ⚡ Generators
-                                        </button>
-                                        <button
-                                            onClick={() => setUpgradeTab('click')}
-                                            className={`px-3 py-2 rounded-lg font-semibold whitespace-nowrap text-xs sm:text-base ${upgradeTab === 'click' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
-                                        >
-                                            🎯 Click
-                                        </button>
-                                        <button
-                                            onClick={() => setUpgradeTab('multiplier')}
-                                            className={`px-3 py-2 rounded-lg font-semibold whitespace-nowrap text-xs sm:text-base ${upgradeTab === 'multiplier' ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700'}`}
-                                        >
-                                            📈 Boost
-                                        </button>
-                                        <button
-                                            onClick={() => setUpgradeTab('automation')}
-                                            className={`px-3 py-2 rounded-lg font-semibold whitespace-nowrap text-xs sm:text-base ${upgradeTab === 'automation' ? 'bg-purple-500 text-white' : 'bg-gray-200 text-gray-700'}`}
-                                        >
-                                            🏆 Auto
-                                        </button>
-                                    </div>
-
-                                    <div className="space-y-2 flex-1 overflow-y-auto">
-                                        {upgradeTab === 'generators' && generators.map(gen => (
-                                            gen.unlocked && (
-                                                <div key={gen.id} className="flex items-center justify-between p-3 sm:p-4 upgrade-card rounded-lg border-2 border-amber-200">
-                                                    <div className="flex-1 min-w-0 mr-2">
-                                                        <div className="font-bold text-gray-800 text-sm sm:text-base">{gen.name}</div>
-                                                        <div className="text-xs sm:text-sm text-gray-600 truncate">
-                                                            {gen.owned} owned | {formatNumber(gen.baseProduction * getCurrentMultiplier())}/s
-                                                        </div>
-                                                    </div>
-                                                    <button
-                                                        onClick={() => buyGenerator(gen.id)}
-                                                        disabled={coins < gen.cost}
-                                                        className={`px-4 sm:px-6 py-2 rounded-lg font-bold whitespace-nowrap text-sm sm:text-base ${
-                                                            coins >= gen.cost
-                                                                ? 'bg-amber-500 text-white active:bg-amber-600'
-                                                                : 'bg-gray-300 text-gray-500'
-                                                        }`}
-                                                    >
-                                                        {formatNumber(gen.cost)}
-                                                    </button>
+                            <div className="space-y-2 max-h-[50vh] overflow-y-auto">
+                                {activeTab === 'generators' && generators.map(gen => {
+                                    const purchase = calculateBuyCost(gen, buyAmount === 'max' ? 'max' : buyAmount);
+                                    return gen.unlocked && (
+                                        <div key={gen.id} className="flex items-center justify-between p-3 sm:p-4 bg-gradient-to-r from-amber-50 to-yellow-50 rounded-lg border-2 border-amber-200">
+                                            <div className="flex-1 min-w-0 mr-2">
+                                                <div className="font-bold text-gray-800 text-sm sm:text-base">{gen.name}</div>
+                                                <div className="text-xs sm:text-sm text-gray-600 truncate">
+                                                    {gen.owned} owned | {formatNumber(gen.baseProduction * getCurrentMultiplier())}/s
                                                 </div>
-                                            )
-                                        ))}
-
-                                        {['click', 'multiplier', 'automation'].includes(upgradeTab) && 
-                                            upgrades
-                                                .filter(u => u.category === upgradeTab)
-                                                .map(upgrade => (
-                                                    <div key={upgrade.id} className={`flex items-center justify-between p-3 sm:p-4 upgrade-card rounded-lg border-2 ${
-                                                        upgrade.owned 
-                                                            ? 'border-gray-300' 
-                                                            : 'border-blue-200'
-                                                    }`}>
-                                                        <div className="flex-1 min-w-0 mr-2">
-                                                            <div className="font-bold text-gray-800 text-sm sm:text-base">{upgrade.name}</div>
-                                                            <div className="text-xs sm:text-sm text-gray-600">
-                                                                {upgrade.clickBonus && `+${upgrade.clickBonus} click`}
-                                                                {upgrade.multiplier && `${upgrade.multiplier}x boost`}
-                                                                {upgrade.autoClick && `${upgrade.autoClick} auto/s`}
-                                                            </div>
-                                                        </div>
-                                                        <button
-                                                            onClick={() => buyUpgrade(upgrade.id)}
-                                                            disabled={upgrade.owned || coins < upgrade.cost}
-                                                            className={`px-4 sm:px-6 py-2 rounded-lg font-bold whitespace-nowrap text-sm sm:text-base ${
-                                                                upgrade.owned
-                                                                    ? 'bg-green-500 text-white'
-                                                                    : coins >= upgrade.cost
-                                                                    ? 'bg-blue-500 text-white active:bg-blue-600'
-                                                                    : 'bg-gray-300 text-gray-500'
-                                                            }`}
-                                                        >
-                                                            {upgrade.owned ? 'OWNED' : formatNumber(upgrade.cost)}
-                                                        </button>
-                                                    </div>
-                                                ))
-                                        }
-                                    </div>
-                                </div>
-                            )}
-
-                            {currentPage === 'shop' && (
-                                <div className="card rounded-lg shadow-lg p-3 sm:p-6 h-full flex flex-col">
-                                    <h2 className="text-2xl font-bold card-header mb-3 text-center">💶 Euro Shop</h2>
-                                    
-                                    <div className="bg-indigo-50 p-3 rounded-lg border-2 border-indigo-200 mb-3">
-                                        <div className="text-sm font-bold text-indigo-900 mb-1">💡 Shop Info</div>
-                                        <div className="text-xs text-indigo-700">
-                                            Items give permanent multiplier bonuses! Each purchase stacks.
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-2 flex-1 overflow-y-auto">
-                                        {items.map(item => (
-                                            <div key={item.id} className="flex items-center justify-between p-3 sm:p-4 upgrade-card rounded-lg border-2 border-indigo-200">
-                                                <div className="flex-1 min-w-0 mr-2">
-                                                    <div className="font-bold text-gray-800 text-sm sm:text-base">{item.name}</div>
-                                                    <div className="text-xs sm:text-sm text-gray-600">
-                                                        Owned: {item.owned} | +{(item.bonus * 100).toFixed(0)}% each
-                                                    </div>
-                                                    {item.owned > 0 && (
-                                                        <div className="text-xs text-green-600 font-semibold">
-                                                            Total: +{(item.bonus * item.owned * 100).toFixed(0)}%
-                                                        </div>
-                                                    )}
-                                                </div>
+                                            </div>
+                                            <div className="flex flex-col items-end gap-1">
+                                                {buyAmount !== 1 && buyAmount !== 'max' && (
+                                                    <div className="text-xs text-gray-500">x{buyAmount}</div>
+                                                )}
+                                                {buyAmount === 'max' && purchase.amount > 0 && (
+                                                    <div className="text-xs text-gray-500">x{purchase.amount}</div>
+                                                )}
                                                 <button
-                                                    onClick={() => buyItem(item.id)}
-                                                    disabled={euros < item.cost}
-                                                    className={`px-4 sm:px-6 py-2 rounded-lg font-bold whitespace-nowrap text-sm sm:text-base ${
-                                                        euros >= item.cost
-                                                            ? 'bg-indigo-500 text-white active:bg-indigo-600'
+                                                    onClick={() => buyGenerator(gen.id)}
+                                                    disabled={coins < purchase.cost || purchase.amount === 0}
+                                                    className={`px-4 sm:px-6 py-2 rounded-lg font-bold whitespace-nowrap text-sm sm:text-base touch-manipulation ${
+                                                        coins >= purchase.cost && purchase.amount > 0
+                                                            ? 'bg-amber-500 text-white active:bg-amber-600'
                                                             : 'bg-gray-300 text-gray-500'
                                                     }`}
                                                 >
-                                                    {formatEuro(item.cost)}
-                                                </button>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-
-                            {currentPage === 'settings' && (
-                                <div className="card rounded-lg shadow-lg p-3 sm:p-6 h-full overflow-y-auto">
-                                    <h2 className="text-2xl font-bold card-header mb-4 text-center">⚙️ Settings</h2>
-                                    
-                                    <div className="space-y-4">
-                                        <div className="bg-gray-100 p-4 rounded-lg">
-                                            <h3 className="font-bold card-header mb-3">🌙 Theme</h3>
-                                            <div className="flex gap-2">
-                                                <button
-                                                    onClick={() => setTheme('system')}
-                                                    className={`flex-1 px-4 py-2 rounded-lg font-semibold ${
-                                                        theme === 'system'
-                                                            ? 'bg-blue-500 text-white'
-                                                            : 'bg-gray-200 text-gray-700'
-                                                    }`}
-                                                >
-                                                    System
-                                                </button>
-                                                <button
-                                                    onClick={() => setTheme('light')}
-                                                    className={`flex-1 px-4 py-2 rounded-lg font-semibold ${
-                                                        theme === 'light'
-                                                            ? 'bg-yellow-400 text-gray-800'
-                                                            : 'bg-gray-200 text-gray-700'
-                                                    }`}
-                                                >
-                                                    ☀️ Light
-                                                </button>
-                                                <button
-                                                    onClick={() => setTheme('dark')}
-                                                    className={`flex-1 px-4 py-2 rounded-lg font-semibold ${
-                                                        theme === 'dark'
-                                                            ? 'bg-gray-800 text-white'
-                                                            : 'bg-gray-200 text-gray-700'
-                                                    }`}
-                                                >
-                                                    🌙 Dark
+                                                    {formatNumber(purchase.cost)}
                                                 </button>
                                             </div>
                                         </div>
+                                    );
+                                })}
 
-                                        <div className="bg-gray-100 p-4 rounded-lg">
-                                            <h3 className="font-bold card-header mb-2">💾 Save Game</h3>
-                                            <div className="text-xs text-secondary mb-3">
-                                                Last saved: {getTimeSince(lastSaved)}
+                                {['click', 'multiplier', 'automation'].includes(activeTab) && 
+                                    upgrades
+                                        .filter(u => u.category === activeTab)
+                                        .map(upgrade => (
+                                            <div key={upgrade.id} className={`flex items-center justify-between p-3 sm:p-4 rounded-lg border-2 ${
+                                                upgrade.owned 
+                                                    ? 'bg-gray-100 border-gray-300' 
+                                                    : 'bg-gradient-to-r from-blue-50 to-cyan-50 border-blue-200'
+                                            }`}>
+                                                <div className="flex-1 min-w-0 mr-2">
+                                                    <div className="font-bold text-gray-800 text-sm sm:text-base">{upgrade.name}</div>
+                                                    <div className="text-xs sm:text-sm text-gray-600">
+                                                        {upgrade.clickBonus && `+${formatNumber(upgrade.clickBonus)} click`}
+                                                        {upgrade.multiplier && `${upgrade.multiplier}x boost`}
+                                                        {upgrade.autoClick && `${formatNumber(upgrade.autoClick)} auto/s`}
+                                                    </div>
+                                                </div>
+                                                <button
+                                                    onClick={() => buyUpgrade(upgrade.id)}
+                                                    disabled={upgrade.owned || coins < upgrade.cost}
+                                                    className={`px-4 sm:px-6 py-2 rounded-lg font-bold whitespace-nowrap text-sm sm:text-base touch-manipulation ${
+                                                        upgrade.owned
+                                                            ? 'bg-green-500 text-white'
+                                                            : coins >= upgrade.cost
+                                                            ? 'bg-blue-500 text-white active:bg-blue-600'
+                                                            : 'bg-gray-300 text-gray-500'
+                                                    }`}
+                                                >
+                                                    {upgrade.owned ? 'OWNED' : formatNumber(upgrade.cost)}
+                                                </button>
                                             </div>
-                                            <div className="grid grid-cols-2 gap-2">
-                                                <button
-                                                    onClick={manualSave}
-                                                    className="px-4 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600"
-                                                >
-                                                    💾 Save
-                                                </button>
-                                                <button
-                                                    onClick={exportSave}
-                                                    className="px-4 py-2 bg-green-500 text-white rounded-lg font-semibold hover:bg-green-600"
-                                                >
-                                                    📥 Export
-                                                </button>
-                                                <button
-                                                    onClick={importSave}
-                                                    className="px-4 py-2 bg-purple-500 text-white rounded-lg font-semibold hover:bg-purple-600"
-                                                >
-                                                    📤 Import
-                                                </button>
-                                                <button
-                                                    onClick={resetGame}
-                                                    className="px-4 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600"
-                                                >
-                                                    🗑️ Reset
-                                                </button>
-                                            </div>
-                                            <div className="text-xs text-muted mt-3">
-                                                💡 Auto-saves every 5 seconds. Export to backup!
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
+                                        ))
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
