@@ -242,6 +242,7 @@
             ]);
             
             const [upgrades, setUpgrades] = useState(savedGame?.upgrades || [
+                // Click upgrades (20 total)
                 { id: 'click1', name: 'Better Fingers', cost: 50, clickBonus: 1, owned: false, category: 'click' },
                 { id: 'click2', name: 'Lucky Coin', cost: 500, clickBonus: 5, owned: false, category: 'click' },
                 { id: 'click3', name: 'Golden Touch', cost: 5000, clickBonus: 25, owned: false, category: 'click' },
@@ -250,7 +251,20 @@
                 { id: 'click6', name: 'Cosmic Touch', cost: 5000000, clickBonus: 2500, owned: false, category: 'click' },
                 { id: 'click7', name: 'Reality Bender', cost: 50000000, clickBonus: 12500, owned: false, category: 'click' },
                 { id: 'click8', name: 'Universe Clicker', cost: 500000000, clickBonus: 62500, owned: false, category: 'click' },
+                { id: 'click9', name: 'Dimension Tapper', cost: 5000000000, clickBonus: 312500, owned: false, category: 'click' },
+                { id: 'click10', name: 'Infinity Touch', cost: 50000000000, clickBonus: 1562500, owned: false, category: 'click' },
+                { id: 'click11', name: 'Quantum Fingers', cost: 500000000000, clickBonus: 7812500, owned: false, category: 'click' },
+                { id: 'click12', name: 'Ethereal Hand', cost: 5000000000000, clickBonus: 39062500, owned: false, category: 'click' },
+                { id: 'click13', name: 'Void Clicker', cost: 50000000000000, clickBonus: 195312500, owned: false, category: 'click' },
+                { id: 'click14', name: 'Celestial Touch', cost: 500000000000000, clickBonus: 976562500, owned: false, category: 'click' },
+                { id: 'click15', name: 'Omnipotent Finger', cost: 5000000000000000, clickBonus: 4882812500, owned: false, category: 'click' },
+                { id: 'click16', name: 'Transcendent Click', cost: 50000000000000000, clickBonus: 24414062500, owned: false, category: 'click' },
+                { id: 'click17', name: 'Primordial Touch', cost: 500000000000000000, clickBonus: 122070312500, owned: false, category: 'click' },
+                { id: 'click18', name: 'Absolute Hand', cost: 5000000000000000000, clickBonus: 610351562500, owned: false, category: 'click' },
+                { id: 'click19', name: 'Eternal Clicker', cost: 50000000000000000000, clickBonus: 3051757812500, owned: false, category: 'click' },
+                { id: 'click20', name: 'Supreme Being', cost: 500000000000000000000, clickBonus: 15258789062500, owned: false, category: 'click' },
                 
+                // Multiplier upgrades (20 total)
                 { id: 'multi1', name: 'Efficiency I', cost: 200, multiplier: 1.5, owned: false, category: 'multiplier' },
                 { id: 'multi2', name: 'Efficiency II', cost: 2000, multiplier: 2, owned: false, category: 'multiplier' },
                 { id: 'multi3', name: 'Efficiency III', cost: 20000, multiplier: 3, owned: false, category: 'multiplier' },
@@ -259,7 +273,20 @@
                 { id: 'multi6', name: 'Reality Warper', cost: 20000000, multiplier: 12, owned: false, category: 'multiplier' },
                 { id: 'multi7', name: 'Dimension Shifter', cost: 200000000, multiplier: 20, owned: false, category: 'multiplier' },
                 { id: 'multi8', name: 'Infinity Engine', cost: 2000000000, multiplier: 50, owned: false, category: 'multiplier' },
+                { id: 'multi9', name: 'Time Dilator', cost: 20000000000, multiplier: 100, owned: false, category: 'multiplier' },
+                { id: 'multi10', name: 'Space Bender', cost: 200000000000, multiplier: 200, owned: false, category: 'multiplier' },
+                { id: 'multi11', name: 'Void Manipulator', cost: 2000000000000, multiplier: 500, owned: false, category: 'multiplier' },
+                { id: 'multi12', name: 'Singularity Core', cost: 20000000000000, multiplier: 1000, owned: false, category: 'multiplier' },
+                { id: 'multi13', name: 'Big Bang Machine', cost: 200000000000000, multiplier: 2500, owned: false, category: 'multiplier' },
+                { id: 'multi14', name: 'Universe Generator', cost: 2000000000000000, multiplier: 5000, owned: false, category: 'multiplier' },
+                { id: 'multi15', name: 'Multiverse Engine', cost: 20000000000000000, multiplier: 10000, owned: false, category: 'multiplier' },
+                { id: 'multi16', name: 'Omniverse Reactor', cost: 200000000000000000, multiplier: 25000, owned: false, category: 'multiplier' },
+                { id: 'multi17', name: 'Infinite Expander', cost: 2000000000000000000, multiplier: 50000, owned: false, category: 'multiplier' },
+                { id: 'multi18', name: 'Transcendent Multiplier', cost: 20000000000000000000, multiplier: 100000, owned: false, category: 'multiplier' },
+                { id: 'multi19', name: 'Absolute Booster', cost: 200000000000000000000, multiplier: 250000, owned: false, category: 'multiplier' },
+                { id: 'multi20', name: 'Eternal Amplifier', cost: 2000000000000000000000, multiplier: 1000000, owned: false, category: 'multiplier' },
                 
+                // Automation upgrades (20 total)
                 { id: 'auto1', name: 'Auto Clicker I', cost: 1000, autoClick: 1, owned: false, category: 'automation' },
                 { id: 'auto2', name: 'Auto Clicker II', cost: 10000, autoClick: 5, owned: false, category: 'automation' },
                 { id: 'auto3', name: 'Auto Clicker III', cost: 100000, autoClick: 25, owned: false, category: 'automation' },
@@ -267,6 +294,19 @@
                 { id: 'auto5', name: 'AI Clicker', cost: 10000000, autoClick: 500, owned: false, category: 'automation' },
                 { id: 'auto6', name: 'Quantum Clicker', cost: 100000000, autoClick: 2500, owned: false, category: 'automation' },
                 { id: 'auto7', name: 'Singularity Clicker', cost: 1000000000, autoClick: 12500, owned: false, category: 'automation' },
+                { id: 'auto8', name: 'Nano Bot Army', cost: 10000000000, autoClick: 62500, owned: false, category: 'automation' },
+                { id: 'auto9', name: 'Molecular Assembler', cost: 100000000000, autoClick: 312500, owned: false, category: 'automation' },
+                { id: 'auto10', name: 'Matter Compiler', cost: 1000000000000, autoClick: 1562500, owned: false, category: 'automation' },
+                { id: 'auto11', name: 'Atomic Synthesizer', cost: 10000000000000, autoClick: 7812500, owned: false, category: 'automation' },
+                { id: 'auto12', name: 'Quantum Factory', cost: 100000000000000, autoClick: 39062500, owned: false, category: 'automation' },
+                { id: 'auto13', name: 'Dimensional Forge', cost: 1000000000000000, autoClick: 195312500, owned: false, category: 'automation' },
+                { id: 'auto14', name: 'Reality Fabricator', cost: 10000000000000000, autoClick: 976562500, owned: false, category: 'automation' },
+                { id: 'auto15', name: 'Universe Constructor', cost: 100000000000000000, autoClick: 4882812500, owned: false, category: 'automation' },
+                { id: 'auto16', name: 'Cosmic Manufacturer', cost: 1000000000000000000, autoClick: 24414062500, owned: false, category: 'automation' },
+                { id: 'auto17', name: 'Infinity Workshop', cost: 10000000000000000000, autoClick: 122070312500, owned: false, category: 'automation' },
+                { id: 'auto18', name: 'Omniversal Plant', cost: 100000000000000000000, autoClick: 610351562500, owned: false, category: 'automation' },
+                { id: 'auto19', name: 'Eternal Machine', cost: 1000000000000000000000, autoClick: 3051757812500, owned: false, category: 'automation' },
+                { id: 'auto20', name: 'Supreme Automation', cost: 10000000000000000000000, autoClick: 15258789062500, owned: false, category: 'automation' },
             ]);
 
             const [activeTab, setActiveTab] = useState('generators');
@@ -455,7 +495,9 @@
             const prestige = () => {
                 if (totalCoins >= 1000000) {
                     const points = Math.floor(Math.sqrt(totalCoins / 1000000));
+                    const euroGain = Math.floor(totalCoins / 10000000); // 10M coins = 1 Euro
                     setPrestigePoints(p => p + points);
+                    setEuros(e => e + euroGain);
                     
                     setCoins(0);
                     setTotalCoins(0);
@@ -467,15 +509,17 @@
                         unlocked: g.id === 1 
                     })));
                     setUpgrades(prev => prev.map(u => ({ ...u, owned: false })));
+                    
+                    setSaveStatus(`Prestige! +${points} PP, +€${euroGain}`);
+                    setTimeout(() => setSaveStatus(''), 3000);
                 }
             };
 
             const buyShopItem = (item) => {
-                const ppCost = item.ppReward;
-                if (prestigePoints >= ppCost) {
-                    setPrestigePoints(p => p - ppCost);
-                    setEuros(e => e + item.euroCost);
-                    setSaveStatus(`Purchased ${item.name}!`);
+                if (euros >= item.euroCost) {
+                    setEuros(e => e - item.euroCost);
+                    setPrestigePoints(p => p + item.ppReward);
+                    setSaveStatus(`Purchased ${item.name}! +${item.ppReward} PP`);
                     setTimeout(() => setSaveStatus(''), 2000);
                 }
             };
@@ -652,7 +696,7 @@
                                     <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
                                 </svg>
                             </button>
-                            <h1 className="text-3xl sm:text-5xl font-bold text-amber-600 text-center flex-1">
+                            <h1 className="text-4xl sm:text-6xl font-bold text-amber-600 flex-1 text-center">
                                 Coin Empire
                             </h1>
                             <div className="w-10"></div>
@@ -683,13 +727,13 @@
                                 </div>
 
                                 <div className="card bg-white rounded-lg shadow-lg p-4 sm:p-6 mb-3 sm:mb-4">
-                                    <div className="flex flex-col items-center justify-center">
+                                    <div className="flex flex-col items-center justify-center min-h-[300px]">
                                         <button
                                             onClick={handleClick}
                                             className={`w-56 h-56 sm:w-64 sm:h-64 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 shadow-xl hover:shadow-2xl transition-all transform active:scale-95 flex flex-col items-center justify-center touch-manipulation ${clickAnimation ? 'scale-110' : ''}`}
                                         >
                                             <Coins className="w-20 h-20 sm:w-24 sm:h-24 text-white mb-2" />
-                                            <div className="text-2xl sm:text-3xl font-bold text-white text-center px-4">
+                                            <div className="text-2xl sm:text-3xl font-bold text-white text-center px-4 break-words max-w-full">
                                                 +{formatNumber(clickPower * getCurrentMultiplier())}
                                             </div>
                                         </button>
@@ -842,24 +886,24 @@
                                     <div className="stat-label text-sm text-gray-600">Your Euros</div>
                                     <div className="stat-value text-3xl font-bold text-green-700">€{euros.toFixed(2)}</div>
                                 </div>
-                                <p className="text-gray-600 mb-4 text-sm">Trade your Prestige Points for real-world items!</p>
+                                <p className="text-gray-600 mb-4 text-sm">Spend Euros to buy items and earn Prestige Points!</p>
                                 <div className="space-y-3">
                                     {shopItems.map(item => (
                                         <div key={item.id} className="upgrade-card flex items-center justify-between p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg border-2 border-indigo-200">
                                             <div className="flex-1">
                                                 <div className="font-bold text-gray-800 text-lg">{item.name}</div>
-                                                <div className="text-sm text-gray-600">Costs: €{item.euroCost} | Reward: €{item.euroCost}</div>
+                                                <div className="text-sm text-gray-600">Cost: €{item.euroCost} → Reward: {item.ppReward} PP</div>
                                             </div>
                                             <button
                                                 onClick={() => buyShopItem(item)}
-                                                disabled={prestigePoints < item.ppReward}
+                                                disabled={euros < item.euroCost}
                                                 className={`px-6 py-2 rounded-lg font-bold whitespace-nowrap ${
-                                                    prestigePoints >= item.ppReward
+                                                    euros >= item.euroCost
                                                         ? 'bg-indigo-500 text-white hover:bg-indigo-600'
                                                         : 'bg-gray-300 text-gray-500'
                                                 }`}
                                             >
-                                                {item.ppReward} PP
+                                                Buy
                                             </button>
                                         </div>
                                     ))}
