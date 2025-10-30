@@ -398,9 +398,36 @@
             };
 
             const formatNumber = (num) => {
-                if (num >= 1e9) return (num / 1e9).toFixed(2) + 'B';
-                if (num >= 1e6) return (num / 1e6).toFixed(2) + 'M';
-                if (num >= 1e3) return (num / 1e3).toFixed(2) + 'K';
+                const suffixes = [
+                    { value: 1e63, symbol: 'Vg' },  // Vigintillion
+                    { value: 1e60, symbol: 'Nd' },  // Novemdecillion
+                    { value: 1e57, symbol: 'Od' },  // Octodecillion
+                    { value: 1e54, symbol: 'Sd' },  // Septendecillion
+                    { value: 1e51, symbol: 'Sxd' }, // Sexdecillion
+                    { value: 1e48, symbol: 'Qid' }, // Quindecillion
+                    { value: 1e45, symbol: 'Qad' }, // Quattuordecillion
+                    { value: 1e42, symbol: 'Td' },  // Tredecillion
+                    { value: 1e39, symbol: 'Dd' },  // Duodecillion
+                    { value: 1e36, symbol: 'Ud' },  // Undecillion
+                    { value: 1e33, symbol: 'Dc' },  // Decillion
+                    { value: 1e30, symbol: 'No' },  // Nonillion
+                    { value: 1e27, symbol: 'Oc' },  // Octillion
+                    { value: 1e24, symbol: 'Sp' },  // Septillion
+                    { value: 1e21, symbol: 'Sx' },  // Sextillion
+                    { value: 1e18, symbol: 'Qi' },  // Quintillion
+                    { value: 1e15, symbol: 'Qa' },  // Quadrillion
+                    { value: 1e12, symbol: 'T' },   // Trillion
+                    { value: 1e9, symbol: 'B' },    // Billion
+                    { value: 1e6, symbol: 'M' },    // Million
+                    { value: 1e3, symbol: 'K' }     // Thousand
+                ];
+                
+                for (let i = 0; i < suffixes.length; i++) {
+                    if (num >= suffixes[i].value) {
+                        return (num / suffixes[i].value).toFixed(2) + suffixes[i].symbol;
+                    }
+                }
+                
                 return Math.floor(num).toLocaleString();
             };
 
